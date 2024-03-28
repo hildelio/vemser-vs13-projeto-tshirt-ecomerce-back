@@ -155,6 +155,7 @@ public class CarrinhoService {
         List<ItemDTO> itensDTO = itemService.converterDTO(carrinho.getItens());
         carrinhoDTO.setItens(itensDTO);
         carrinhoDTO.setIdCarrinho(carrinho.getIdCarrinho());
+        carrinhoDTO.setTotal(carrinho.getTotal());
         return carrinhoDTO;
     }
 
