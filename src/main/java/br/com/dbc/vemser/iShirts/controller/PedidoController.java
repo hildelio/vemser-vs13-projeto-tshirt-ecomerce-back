@@ -7,6 +7,7 @@ import br.com.dbc.vemser.iShirts.dto.pedido.PedidoDTO;
 import br.com.dbc.vemser.iShirts.dto.pedido.PedidoUpdateDTO;
 import br.com.dbc.vemser.iShirts.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.iShirts.service.PedidoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,7 +26,10 @@ import java.util.List;
 @Validated
 @AllArgsConstructor
 @RequestMapping("/pedido")
-public class PedidoController implements PedidoControllerInterface {
+
+@Tag(name = "Pedido", description = "Controller responsável pelas operações relacionadas à Pedido.")
+public class PedidoController implements PedidoControllerInterface{
+
     private PedidoService pedidoService;
     @GetMapping("/{idPedido}")
     public ResponseEntity<PedidoDTO> listarPedidoPorId(@PathVariable("idPedido") Integer idPedido) throws RegraDeNegocioException {
