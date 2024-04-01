@@ -97,7 +97,13 @@ public class PedidoService {
         if (cupom != null) {
             pedido.setCupom(cupom);
         }
-        pedido.setTotalBruto(carrinhoService.calcularValorBrutoTotal(carrinho));
+        BigDecimal totalBruto = carrinhoService.calcularValorBrutoTotal(carrinho);
+
+        if (totalBruto == null) {
+            totalBruto = BigDecimal.ZERO;
+        }
+
+        pedido.setTotalBruto(totalBruto);
         pedido.setDesconto(pedido.getTotalBruto().subtract(pedido.getTotalLiquido()));
         pedido.setStatus(StatusPedido.EM_ANDAMENTO);
         return pedido;
