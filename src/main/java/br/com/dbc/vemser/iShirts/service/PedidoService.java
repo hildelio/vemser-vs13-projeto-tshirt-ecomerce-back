@@ -91,6 +91,9 @@ public class PedidoService {
         Pedido pedido = new Pedido();
         pedido.setPessoa(pessoaService.buscarPessoaPorUsuario(usuario));
         pedido.setMetodoPagamento(pedidoCreateDTO.getMetodoPagamento());
+        if(carrinho.getItens().isEmpty()){
+            throw new RegraDeNegocioException("O carrinho está vazio");
+        }
         pedido.setItens(new ArrayList<>(carrinho.getItens()));
         pedido.setTotalLiquido(validarCupom(carrinho.getTotal(), pedidoCreateDTO.getIdCupom()));
         Cupom cupom = getCupom(pedidoCreateDTO.getIdCupom());

@@ -32,6 +32,9 @@ public class  SecurityConfiguration {
                         .antMatchers("/","/auth/criar-cliente", "/auth/login").permitAll()
                         .antMatchers(HttpMethod.GET, "/produto/**").permitAll()
                         .antMatchers("/cargo/cadastro", "/cargo/{idCargo}", "/cargo").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.DELETE, "/pedido/**").hasAnyRole("ADMIN", "CLIENTE", "FUNIONARIO")
+                        .antMatchers(HttpMethod.POST, "/pedido/**").hasAnyRole("ADMIN", "CLIENTE", "FUNIONARIO")
+                        .antMatchers(HttpMethod.PUT, "/pedido/**").hasAnyRole("ADMIN", "CLIENTE", "FUNIONARIO")
                         .anyRequest().authenticated()
                 );
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
