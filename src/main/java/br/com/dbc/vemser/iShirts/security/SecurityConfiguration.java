@@ -16,6 +16,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.servlet.http.HttpServletResponse;
+
 
 @Configuration
 @EnableWebSecurity
@@ -36,6 +38,10 @@ public class  SecurityConfiguration {
                         .antMatchers(HttpMethod.POST, "/pedido/**").hasAnyRole("ADMIN", "CLIENTE", "FUNIONARIO")
                         .antMatchers(HttpMethod.PUT, "/pedido/**").hasAnyRole("ADMIN", "CLIENTE", "FUNIONARIO")
                         .anyRequest().authenticated()
+                )
+                .exceptionHandling(configurer -> configurer
+                        .authenticationEntryPoint((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"))
+                        .accessDeniedHandler((request, response, accessDeniedException) -> response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden"))
                 );
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
 
