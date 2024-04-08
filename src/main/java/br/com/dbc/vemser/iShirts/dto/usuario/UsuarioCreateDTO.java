@@ -20,6 +20,8 @@ public class UsuarioCreateDTO {
 
     @NotBlank
     @Schema(description = "E-mail do Usuário", required = true, example = "cliente@dbccompany.com.br")
+    @Pattern(regexp = "^[A-Za-z]{2,}@[A-Za-z]{2,}\\.[A-Za-z]{2,}$",
+            message = "E-mail não cumpre o formato requerido.")
     private String email;
 
     @NotBlank
