@@ -2,6 +2,7 @@ package br.com.dbc.vemser.iShirts.controller.interfaces;
 
 import br.com.dbc.vemser.iShirts.dto.cargo.CargoCreateDTO;
 import br.com.dbc.vemser.iShirts.dto.cargo.CargoDTO;
+import br.com.dbc.vemser.iShirts.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -30,7 +31,7 @@ public interface CargoControllerInterface {
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso."),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção.")
     })
-    public ResponseEntity<String> adicionar(@RequestBody @Valid CargoCreateDTO cargoCreateDTO) ;
+    public ResponseEntity<String> adicionar(@RequestBody @Valid CargoCreateDTO cargoCreateDTO) throws RegraDeNegocioException;
 
 
     @Operation(summary = "Deleta um cargo no banco", description = "Deleta um cargo  no sistema.")

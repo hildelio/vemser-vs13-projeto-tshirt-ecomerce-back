@@ -34,7 +34,7 @@ public class CargoServiceTest {
 
     @Test
     @DisplayName("Deve criar cargo com sucesso")
-    public void criarCargoComSucesso() {
+    public void criarCargoComSucesso() throws RegraDeNegocioException {
         CargoCreateDTO cargoCreateDTOMock = retornarCargoCreateDTO();
         Cargo cargoMock = retornarCargoEntity();
 

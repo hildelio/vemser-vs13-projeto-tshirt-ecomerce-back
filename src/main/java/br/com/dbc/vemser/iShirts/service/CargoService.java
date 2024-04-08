@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,11 +20,20 @@ public class CargoService {
     private final ObjectMapper objectMapper;
 
 
-    public void criarCargo(CargoCreateDTO cargoCreateDTO) {
-        Cargo cargo = new Cargo();
-        cargo.setDescricao(cargoCreateDTO.getDescricao());
-        cargoRepository.save(cargo);
+    public void criarCargo(CargoCreateDTO cargoCreateDTO) throws RegraDeNegocioException {
+        String descricao = cargoCreateDTO.getDescricao();
+
+        Optional<Cargo> cargoExistente = cargoRepository.findByDescricao(descricao);
+
+        if (cargoExistente.isEmpty()) {
+            Cargo cargo = new Cargo();
+            cargo.setDescricao(descricao);
+            cargoRepository.save(cargo);
+        } else {
+           throw new RegraDeNegocioException("Esse cargo já existe!");
+        }
     }
+
 
     public void deletarCargo(Integer idCargo) {
         cargoRepository.deleteById(idCargo);
