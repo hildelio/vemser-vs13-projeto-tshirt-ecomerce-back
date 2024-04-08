@@ -3,6 +3,7 @@ package br.com.dbc.vemser.iShirts.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -29,7 +30,11 @@ public class  SecurityConfiguration {
                 .csrf().disable()
                 .authorizeHttpRequests((authz) -> authz
                         .antMatchers("/","/auth/criar-cliente", "/auth/login").permitAll()
+                        .antMatchers(HttpMethod.GET, "/produto/**").permitAll()
                         .antMatchers("/cargo/cadastro", "/cargo/{idCargo}", "/cargo").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.DELETE, "/pedido/**").hasAnyRole("ADMIN", "CLIENTE", "FUNIONARIO")
+                        .antMatchers(HttpMethod.POST, "/pedido/**").hasAnyRole("ADMIN", "CLIENTE", "FUNIONARIO")
+                        .antMatchers(HttpMethod.PUT, "/pedido/**").hasAnyRole("ADMIN", "CLIENTE", "FUNIONARIO")
                         .anyRequest().authenticated()
                 );
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
