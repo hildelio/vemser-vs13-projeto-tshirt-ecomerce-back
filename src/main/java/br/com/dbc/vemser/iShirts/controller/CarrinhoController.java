@@ -45,12 +45,12 @@ public class CarrinhoController implements CarrinhoControllerInterface {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCarrinho(@PathVariable Integer id) throws RegraDeNegocioException {
         carrinhoService.deleteCarrinho(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
     @DeleteMapping()
     public ResponseEntity<Void> limparCarrinho() throws RegraDeNegocioException {
         carrinhoService.limparCarrinho();
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping("/adicionar-item")
