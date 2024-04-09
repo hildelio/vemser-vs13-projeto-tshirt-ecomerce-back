@@ -35,7 +35,8 @@ public class CargoService {
     }
 
 
-    public void deletarCargo(Integer idCargo) {
+    public void deletarCargo(Integer idCargo) throws RegraDeNegocioException {
+        buscarCargoPorId(idCargo);
         cargoRepository.deleteById(idCargo);
     }
 
