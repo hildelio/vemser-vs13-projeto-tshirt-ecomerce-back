@@ -2,6 +2,7 @@ package br.com.dbc.vemser.iShirts.service;
 
 import br.com.dbc.vemser.iShirts.dto.cargo.CargoCreateDTO;
 import br.com.dbc.vemser.iShirts.dto.cargo.CargoDTO;
+import br.com.dbc.vemser.iShirts.enums.MensagemRetorno;
 import br.com.dbc.vemser.iShirts.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.iShirts.model.Cargo;
 import br.com.dbc.vemser.iShirts.repository.CargoRepository;
@@ -19,7 +20,6 @@ public class CargoService {
     private final CargoRepository cargoRepository;
     private final ObjectMapper objectMapper;
 
-
     public void criarCargo(CargoCreateDTO cargoCreateDTO) throws RegraDeNegocioException {
         String descricao = cargoCreateDTO.getDescricao();
 
@@ -34,10 +34,12 @@ public class CargoService {
         }
     }
 
+    public String deletarCargo(Integer idCargo) throws RegraDeNegocioException {
+        Cargo cargo = cargoRepository.findById(idCargo)
+                .orElseThrow(() -> new RegraDeNegocioException("Cargo não encontrado!"));
 
-    public void deletarCargo(Integer idCargo) throws RegraDeNegocioException {
-        buscarCargoPorId(idCargo);
-        cargoRepository.deleteById(idCargo);
+        cargoRepository.delete(cargo);
+        return MensagemRetorno.EXCLUIDA_COM_SUCESSO.getMensagemRetorno();
     }
 
     public List<CargoDTO> listarCargos() throws Exception {
