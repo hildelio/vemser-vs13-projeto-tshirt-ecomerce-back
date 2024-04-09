@@ -48,12 +48,7 @@ public class CargoServiceTest {
     @Test
     @DisplayName("Deve deletar cargo com sucesso")
     public void deletarCargoComSucesso() throws RegraDeNegocioException {
-        Cargo cargoMock = retornarCargoEntity();
         Integer idAleatorio = new Random().nextInt();
-
-        when(cargoRepository.findById(idAleatorio)).thenReturn(Optional.of(cargoMock));
-
-        Cargo cargoRetornado = cargoService.buscarCargoPorId(idAleatorio);
 
         cargoService.deletarCargo(idAleatorio);
 
