@@ -47,7 +47,7 @@ public class CargoServiceTest {
 
     @Test
     @DisplayName("Deve deletar cargo com sucesso")
-    public void deletarCargoComSucesso() {
+    public void deletarCargoComSucesso() throws RegraDeNegocioException {
         Integer idAleatorio = new Random().nextInt();
 
         cargoService.deletarCargo(idAleatorio);

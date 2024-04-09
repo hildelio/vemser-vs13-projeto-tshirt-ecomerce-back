@@ -34,8 +34,8 @@ public class CargoController implements CargoControllerInterface {
     }
 
     @DeleteMapping("/{idCargo}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer idCargo) {
-        cargoService.deletarCargo(idCargo);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> deletar(@PathVariable Integer idCargo) throws RegraDeNegocioException {
+        String message = cargoService.deletarCargo(idCargo);
+        return ResponseEntity.ok(message);
     }
 }

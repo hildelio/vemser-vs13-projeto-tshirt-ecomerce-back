@@ -7,7 +7,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -41,5 +42,5 @@ public interface CargoControllerInterface {
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso."),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção.")
     })
-    public ResponseEntity<Void> deletar(@PathVariable Integer idCargo);
+    ResponseEntity<String> deletar(@PathVariable Integer idCargo) throws RegraDeNegocioException;
 }
