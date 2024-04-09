@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static java.lang.Integer.parseInt;
+
 @RestController
 @RequestMapping("/cargo")
 @Validated
@@ -34,7 +36,7 @@ public class CargoController implements CargoControllerInterface {
     }
 
     @DeleteMapping("/{idCargo}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer idCargo) {
+    public ResponseEntity<Void> deletar(@PathVariable Integer idCargo) throws RegraDeNegocioException {
         cargoService.deletarCargo(idCargo);
         return ResponseEntity.ok().build();
     }
