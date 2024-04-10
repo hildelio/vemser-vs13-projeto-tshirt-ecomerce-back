@@ -8,6 +8,7 @@ import br.com.dbc.vemser.iShirts.repository.FotoRepository;
 import br.com.dbc.vemser.iShirts.utils.MediaTypeUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -71,6 +72,11 @@ public class FotoService {
         String tipoArquivo = mediaTypeUtil.getTipoArquivo(arquivo);
         validarFormato(tipoArquivo);
         String nome = LocalDateTime.now() + "_" + arquivo.getOriginalFilename();
+
+        if (arquivo.getSize() > 3145728) {
+            throw new SizeLimitExceededException("Tamanho do arquivo excede o limite máximo de 3 MB", arquivo.getSize(), 3145728);
+        }
+
         if (nome.length() > 255) {
             throw new RegraDeNegocioException("Nome do arquivo é muito grande");
         }
