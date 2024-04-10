@@ -47,8 +47,7 @@ public class CupomController implements CupomControllerInterface {
     }
 
     @DeleteMapping("{idCupom}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer idCupom) throws RegraDeNegocioException {
-        cupomService.deletar(idCupom);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<String> deletar(@PathVariable Integer idCupom) throws RegraDeNegocioException {
+        return new ResponseEntity<>(cupomService.deletar(idCupom),HttpStatus.OK);
     }
 }
