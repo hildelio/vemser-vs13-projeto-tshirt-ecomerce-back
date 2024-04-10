@@ -1,17 +1,13 @@
 package br.com.dbc.vemser.iShirts.dto.cupom;
 
-import br.com.dbc.vemser.iShirts.exceptions.RegraDeNegocioException;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 @Getter
 @Setter
@@ -25,6 +21,7 @@ public class CupomCreateDTO {
     private Integer codigo;
 
     @NotNull
+    @Min(value = 1)
     @Schema(description = "Valor do cupom", example = "250", required = true)
     private Double valor;
 
