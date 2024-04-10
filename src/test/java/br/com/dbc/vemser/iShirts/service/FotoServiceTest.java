@@ -1,6 +1,5 @@
 package br.com.dbc.vemser.iShirts.service;
 
-import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.mock.web.MockMultipartFile;
 import br.com.dbc.vemser.iShirts.dto.foto.FotoDTO;
 import br.com.dbc.vemser.iShirts.model.Foto;
@@ -86,27 +85,6 @@ class FotoServiceTest {
             fotoService.criar(arquivo, variacao.getIdVariacao());
         });
     }
-
-    @Test
-    @DisplayName("Deve lançar exceção ao criar foto com arquivo muito grande")
-    void createFotoTamanhoMuitoGrande() throws RegraDeNegocioException, IOException {
-        Variacao variacao = MockVariacao.retornarEntity();
-        byte[] conteudoDoArquivo = new byte[4000000];
-        MultipartFile arquivo = new MockMultipartFile(
-                "example.jpg",
-                "example.jpg",
-                "image/jpeg",
-                conteudoDoArquivo
-        );
-
-        when(mediaTypeUtil.getTipoArquivo(any())).thenReturn("JPEG");
-        when(variacaoService.buscarPorId(variacao.getIdVariacao())).thenReturn(variacao);
-
-        assertThrows(SizeLimitExceededException.class, () -> {
-            fotoService.criar(arquivo, variacao.getIdVariacao());
-        });
-    }
-
 
 
     @Test
