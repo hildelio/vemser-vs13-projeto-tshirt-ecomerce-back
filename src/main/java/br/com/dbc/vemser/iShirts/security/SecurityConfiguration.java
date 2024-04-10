@@ -16,6 +16,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.servlet.http.HttpServletResponse;
+
 
 @Configuration
 @EnableWebSecurity
@@ -23,34 +25,27 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class  SecurityConfiguration {
     private final TokenService tokenService;
 
-//    @Bean
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-//        http.headers().frameOptions().disable().and()
-//                .cors().and()
-//                .csrf().disable()
-//                .authorizeHttpRequests((authz) -> authz
-//                        .antMatchers("/","/auth/criar-cliente", "/auth/login").permitAll()
-//                        .antMatchers(HttpMethod.GET, "/produto/**").permitAll()
-//                        .antMatchers("/cargo/cadastro", "/cargo/{idCargo}", "/cargo").hasRole("ADMIN")
-//                        .antMatchers(HttpMethod.DELETE, "/pedido/**").hasAnyRole("ADMIN", "CLIENTE", "FUNCIONARIO")
-//                        .antMatchers(HttpMethod.POST, "/pedido/**").hasAnyRole("ADMIN", "CLIENTE", "FUNCIONARIO")
-//                        .antMatchers(HttpMethod.PUT, "/pedido/**").hasAnyRole("ADMIN", "CLIENTE", "FUNCIONARIO")
-//                        .antMatchers(HttpMethod.POST, "/endereco/**").hasAnyRole("ADMIN", "CLIENTE", "FUNCIONARIO")
-//                        .antMatchers(HttpMethod.PUT, "/endereco/**").hasAnyRole("ADMIN", "CLIENTE", "FUNCIONARIO")
-//                        .anyRequest().authenticated()
-//                );
-//        http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
-//
-//        return http.build();
-//    }
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.headers().frameOptions().disable().and()
                 .cors().and()
                 .csrf().disable()
                 .authorizeHttpRequests((authz) -> authz
-                        .anyRequest().permitAll()
+                        .antMatchers("/","/auth/criar-cliente", "/auth/login").permitAll()
+                        .antMatchers(HttpMethod.GET, "/produto/**").permitAll()
+                        .antMatchers(HttpMethod.DELETE, "/cargo/**").hasRole("ADMIN")
+                        .antMatchers("/cargo/cadastro", "/cargo/{idCargo}", "/cargo").hasRole("ADMIN")
+                        .antMatchers(HttpMethod.DELETE, "/pedido/**").hasAnyRole("ADMIN", "CLIENTE", "FUNCIONARIO")
+                        .antMatchers(HttpMethod.POST, "/pedido/**").hasAnyRole("ADMIN", "CLIENTE", "FUNCIONARIO")
+                        .antMatchers(HttpMethod.PUT, "/pedido/**").hasAnyRole("ADMIN", "CLIENTE", "FUNCIONARIO")
+                        .antMatchers(HttpMethod.POST, "/endereco/**").hasAnyRole("ADMIN", "CLIENTE", "FUNCIONARIO")
+                        .antMatchers(HttpMethod.PUT, "/endereco/**").hasAnyRole("ADMIN", "CLIENTE", "FUNCIONARIO")
+
+                        .anyRequest().authenticated()
+                )
+                .exceptionHandling(configurer -> configurer
+                        .authenticationEntryPoint((request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"))
+                        .accessDeniedHandler((request, response, accessDeniedException) -> response.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden"))
                 );
         http.addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
 

@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -19,5 +20,7 @@ import javax.validation.constraints.Size;
 public class UsuarioUpdateDTO {
     @NotBlank
     @Schema(description = "E-mail do Usuário", required = true, example = "cliente@dbccompany.com.br")
+    @Pattern(regexp = "^[A-Za-z]{2,}@[A-Za-z]{2,}\\.[A-Za-z]{2,}$",
+            message = "E-mail não cumpre o formato requerido.")
     private String email;
 }
