@@ -7,8 +7,10 @@ import br.com.dbc.vemser.iShirts.dto.cupom.CupomUpdateDTO;
 import br.com.dbc.vemser.iShirts.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.iShirts.service.CupomService;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +27,7 @@ public class CupomController implements CupomControllerInterface {
     private final CupomService cupomService;
 
     @GetMapping
-    public ResponseEntity<Page<CupomDTO>> listar(@PageableDefault(value = 10, page = 0, sort = "validade") Pageable pageable) {
+    public ResponseEntity<Page<CupomDTO>> listar(@ParameterObject  @PageableDefault(size = 20, page = 0, sort = "idCupom", direction = Sort.Direction.ASC) Pageable pageable) {
         return new ResponseEntity<>(cupomService.listar(pageable), HttpStatus.OK);
     }
 
@@ -45,8 +47,7 @@ public class CupomController implements CupomControllerInterface {
     }
 
     @DeleteMapping("{idCupom}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer idCupom) throws RegraDeNegocioException {
-        cupomService.deletar(idCupom);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<String> deletar(@PathVariable Integer idCupom) throws RegraDeNegocioException {
+        return new ResponseEntity<>(cupomService.deletar(idCupom),HttpStatus.OK);
     }
 }

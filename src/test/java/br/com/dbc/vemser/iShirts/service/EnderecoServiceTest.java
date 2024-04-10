@@ -62,7 +62,7 @@ class EnderecoServiceTest {
 
     @DisplayName("Deveria listar endereço por pessoa")
     @Test
-    void deveriaListarTodoEnderecoPessoaId(){
+    void deveriaListarTodoEnderecoPessoaId() throws RegraDeNegocioException {
         Page<Endereco> pageEnitty = new PageImpl<>(List.of(MockEndereco.retornaEntity()));
         EnderecoDTO enderecoDTO = MockEndereco.retornaDTO();
 

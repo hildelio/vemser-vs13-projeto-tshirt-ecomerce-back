@@ -49,10 +49,13 @@ public class CargoServiceTest {
     @DisplayName("Deve deletar cargo com sucesso")
     public void deletarCargoComSucesso() throws RegraDeNegocioException {
         Integer idAleatorio = new Random().nextInt();
+        Cargo cargoMock = retornarCargoEntity();
+
+        when(cargoRepository.findById(idAleatorio)).thenReturn(Optional.of(cargoMock));
 
         cargoService.deletarCargo(idAleatorio);
 
-        verify(cargoRepository, times(1)).deleteById(idAleatorio);
+        verify(cargoRepository, times(1)).delete(cargoMock);
     }
 
     @Test

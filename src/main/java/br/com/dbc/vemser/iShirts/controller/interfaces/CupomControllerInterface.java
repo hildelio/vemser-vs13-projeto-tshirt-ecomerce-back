@@ -64,5 +64,5 @@ public interface CupomControllerInterface {
             @ApiResponse(responseCode = "404", description = "Cupom não encontrado."),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção.")
     })
-    ResponseEntity<Void> deletar(@PathVariable Integer idCupom) throws RegraDeNegocioException;
+    ResponseEntity<String> deletar(@PathVariable Integer idCupom) throws RegraDeNegocioException;
 }
