@@ -38,20 +38,24 @@ public class EnderecoService {
         return enderecosPage;
     }
 
-    public Page<EnderecoDTO> listarPorPessoa (Integer idPessoa,Integer tamanhoPagina, Integer paginaSolicitada){
+    public Page<EnderecoDTO> listarPorPessoa (Integer idPessoa,Integer tamanhoPagina, Integer paginaSolicitada) throws RegraDeNegocioException {
+        Pessoa pessoa = this.pessoaService.buscarPessoaPorId(idPessoa);
+
         Pageable pageable = PageRequest.of(paginaSolicitada,tamanhoPagina);
         Page<EnderecoDTO> enderecoDTOs = this.enderecoRepository.findAllByIdPessoaIs(idPessoa,pageable).map(endereco -> retornarDTO(endereco));
+
+        if (enderecoDTOs.isEmpty()) {
+            throw new RegraDeNegocioException("Não foram encontrados endereços para a pessoa com ID " + idPessoa);
+        }
 
         return enderecoDTOs;
     }
 
     public EnderecoDTO salvarEndereco(EnderecoCreateDTO dto) throws RegraDeNegocioException {
         Endereco enderecoEntidade = retornarEntidade(dto);
-
+        enderecoEntidade.setCriadoEm(Timestamp.valueOf(LocalDateTime.now()));
         Endereco novoEndereco = this.enderecoRepository.save(enderecoEntidade);
-
         return retornarDTO(novoEndereco);
-
     }
 
     public Endereco buscarPorId(Integer idEndereco) throws RegraDeNegocioException {
