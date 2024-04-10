@@ -28,6 +28,7 @@ public class CupomCreateDTO {
     private Integer limiteUso;
 
     @NotNull
+    @Positive
     @Schema(description = "Valor mínimo para uso do cupom", example = "500", required = true)
     private Double valorMinimo;
 }
