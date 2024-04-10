@@ -47,11 +47,9 @@ public class EnderecoService {
 
     public EnderecoDTO salvarEndereco(EnderecoCreateDTO dto) throws RegraDeNegocioException {
         Endereco enderecoEntidade = retornarEntidade(dto);
-
+        enderecoEntidade.setCriadoEm(Timestamp.valueOf(LocalDateTime.now()));
         Endereco novoEndereco = this.enderecoRepository.save(enderecoEntidade);
-
         return retornarDTO(novoEndereco);
-
     }
 
     public Endereco buscarPorId(Integer idEndereco) throws RegraDeNegocioException {
