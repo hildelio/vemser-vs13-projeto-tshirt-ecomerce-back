@@ -43,7 +43,7 @@ public interface EnderecoControllerInterface {
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção.")
     })
     @GetMapping("/por-pessoa/{idPessoa}")
-    public ResponseEntity<Page<EnderecoDTO>> listarTodos(@PathVariable Integer idPessoa,@RequestParam Integer tamanhoPagina, @RequestParam Integer paginaSolicitada );
+    public ResponseEntity<Page<EnderecoDTO>> listarTodos(@PathVariable Integer idPessoa,@RequestParam Integer tamanhoPagina, @RequestParam Integer paginaSolicitada ) throws RegraDeNegocioException;
 
 
     @Operation(summary = "Criação de um novo endereço por pessoa", description = "Criação de um novo endereço por pessoa cadastradas no sistema.")

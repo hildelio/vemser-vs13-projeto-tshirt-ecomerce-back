@@ -31,8 +31,10 @@ public class EnderecoController implements EnderecoControllerInterface {
         return ResponseEntity.ok(this.enderecoService.buscarPorIdDto(idEndereco));
    }
 
-    public ResponseEntity<Page<EnderecoDTO>> listarTodos( Integer idPessoa, Integer tamanhoPagina,  Integer paginaSolicitada ){
-        return ResponseEntity.ok(this.enderecoService.listarPorPessoa(idPessoa,tamanhoPagina,paginaSolicitada));
+    @Override
+    public ResponseEntity<Page<EnderecoDTO>> listarTodos(@PathVariable Integer idPessoa, @RequestParam Integer tamanhoPagina, @RequestParam Integer paginaSolicitada) throws RegraDeNegocioException {
+        Page<EnderecoDTO> enderecos = this.enderecoService.listarPorPessoa(idPessoa, tamanhoPagina, paginaSolicitada);
+        return ResponseEntity.ok(enderecos);
     }
 
     public ResponseEntity<EnderecoDTO> salvarEndereco(  EnderecoCreateDTO dto) throws RegraDeNegocioException {
