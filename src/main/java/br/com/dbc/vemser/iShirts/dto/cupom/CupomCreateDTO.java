@@ -8,6 +8,7 @@ import javax.validation.constraints.Future;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Positive;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -38,6 +39,7 @@ public class CupomCreateDTO {
     private Integer limiteUso;
 
     @NotNull
+    @Positive
     @Min(value = 1)
     @Schema(description = "Valor mínimo para uso do cupom", example = "500", required = true)
     private Double valorMinimo;
