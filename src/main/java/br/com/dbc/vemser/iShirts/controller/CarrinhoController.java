@@ -48,9 +48,9 @@ public class CarrinhoController implements CarrinhoControllerInterface {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
     @DeleteMapping()
-    public ResponseEntity<Void> limparCarrinho() throws RegraDeNegocioException {
+    public ResponseEntity<String> limparCarrinho() throws RegraDeNegocioException {
         carrinhoService.limparCarrinho();
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).body("Itens do carrinho deletado com sucesso!");
     }
 
     @PostMapping("/adicionar-item")
