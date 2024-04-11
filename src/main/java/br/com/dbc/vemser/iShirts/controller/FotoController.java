@@ -40,8 +40,8 @@ public class FotoController implements FotoControllerInterface {
     }
 
     @DeleteMapping("/{idFoto}")
-    public ResponseEntity<Void> deletarFoto(@PathVariable("idFoto") Integer idFoto) throws RegraDeNegocioException {
+    public ResponseEntity<String> deletarFoto(@PathVariable("idFoto") Integer idFoto) throws RegraDeNegocioException {
         fotoService.deletar(idFoto);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.ok("Foto excluída com sucesso!");
     }
 }

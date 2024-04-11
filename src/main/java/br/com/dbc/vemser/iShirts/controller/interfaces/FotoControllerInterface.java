@@ -57,5 +57,5 @@ public interface FotoControllerInterface {
             }
     )
     @DeleteMapping("/{idFoto}")
-    ResponseEntity<Void> deletarFoto(@PathVariable("idFoto") Integer idFoto) throws RegraDeNegocioException;
+    ResponseEntity<String> deletarFoto(@PathVariable("idFoto") Integer idFoto) throws RegraDeNegocioException;
 }
