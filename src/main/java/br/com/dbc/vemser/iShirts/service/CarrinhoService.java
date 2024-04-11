@@ -29,7 +29,7 @@ public class CarrinhoService {
 
     public Carrinho buscarCarrinhoPorId(Integer id) throws RegraDeNegocioException {
         return carrinhoRepository.findById(id)
-                .orElseThrow(() -> new RegraDeNegocioException("Carrinho não encontrado com o ID: " + id));
+                .orElseThrow(() -> new RegraDeNegocioException("Carrinho não encontrado"));
     }
 
     public Carrinho buscarCarrinhoUsuarioLogado() throws RegraDeNegocioException {
