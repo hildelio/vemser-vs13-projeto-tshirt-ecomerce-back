@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -69,9 +70,19 @@ public class CarrinhoService {
         Carrinho carrinho = buscarCarrinhoUsuarioLogado();
         Item item = itemService.salvarItem(itemService.criarItem(itemCreateDTO));
 
-        carrinho.getItens().add(item);
-        calcularTotal(carrinho);
+        Optional<Item> itemExistente = carrinho.getItens().stream()
+                .filter(i -> i.getVariacao().getProduto().getIdProduto().equals(item.getVariacao().getProduto().getIdProduto()))
+                .findFirst();
 
+        if (itemExistente.isPresent()) {
+            Item itemAtual = itemExistente.get();
+            itemAtual.setQuantidade(itemAtual.getQuantidade() + item.getQuantidade());
+            itemService.calcularSubTotal(itemAtual);
+        } else {
+            carrinho.getItens().add(item);
+        }
+
+        calcularTotal(carrinho);
         return converterDTO(carrinhoRepository.save(carrinho));
     }
 
@@ -81,6 +92,31 @@ public class CarrinhoService {
 
         carrinho.getItens().remove(item);
         itemService.delete(item);
+        calcularTotal(carrinho);
+
+        return converterDTO(carrinhoRepository.save(carrinho));
+    }
+
+    public CarrinhoDTO removerUmaUnidadeItemCarrinho(Integer idItem) throws RegraDeNegocioException {
+        Carrinho carrinho = buscarCarrinhoUsuarioLogado();
+        Item item = itemService.buscarItemPorId(idItem);
+
+        Optional<Item> itemExistente = carrinho.getItens().stream()
+                .filter(i -> i.getVariacao().getProduto().getIdProduto().equals(item.getVariacao().getProduto().getIdProduto()))
+                .findFirst();
+
+        if (itemExistente.isPresent()) {
+            Item itemEncontrado = itemExistente.get();
+            if (itemEncontrado.getQuantidade() > 1) {
+                itemEncontrado.setQuantidade(itemEncontrado.getQuantidade() - 1);
+                itemService.calcularSubTotal(itemEncontrado);
+            } else {
+                carrinho.getItens().remove(itemEncontrado);
+                itemService.delete(itemEncontrado);
+            }
+        } else {
+            throw new RegraDeNegocioException("Item não encontrado no carrinho");
+        }
         calcularTotal(carrinho);
 
         return converterDTO(carrinhoRepository.save(carrinho));

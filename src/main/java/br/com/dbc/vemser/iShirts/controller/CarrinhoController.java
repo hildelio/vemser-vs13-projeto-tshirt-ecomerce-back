@@ -6,13 +6,10 @@ import br.com.dbc.vemser.iShirts.dto.carrinho.CarrinhoDTO;
 import br.com.dbc.vemser.iShirts.dto.item.ItemCreateDTO;
 import br.com.dbc.vemser.iShirts.dto.item.ItemUpdateQuantidadeDTO;
 import br.com.dbc.vemser.iShirts.exceptions.RegraDeNegocioException;
-import br.com.dbc.vemser.iShirts.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import br.com.dbc.vemser.iShirts.model.Carrinho;
 import br.com.dbc.vemser.iShirts.service.CarrinhoService;
 
 import javax.validation.Valid;
@@ -68,6 +65,12 @@ public class CarrinhoController implements CarrinhoControllerInterface {
     @DeleteMapping("/remover-item/{idItem}")
     public ResponseEntity<CarrinhoDTO> removerItemCarrinho(@PathVariable Integer idItem) throws RegraDeNegocioException {
         CarrinhoDTO carrinho = carrinhoService.removerItemCarrinho(idItem);
+        return ResponseEntity.ok(carrinho);
+    }
+
+    @DeleteMapping("/remover-uma-unidade/{idItem}")
+    public ResponseEntity<CarrinhoDTO> removerUmaUnidadeItemCarrinho(@PathVariable Integer idItem) throws RegraDeNegocioException {
+        CarrinhoDTO carrinho = carrinhoService.removerUmaUnidadeItemCarrinho(idItem);
         return ResponseEntity.ok(carrinho);
     }
 }
