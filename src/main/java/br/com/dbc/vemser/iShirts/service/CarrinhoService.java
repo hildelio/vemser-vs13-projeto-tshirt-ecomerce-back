@@ -29,7 +29,7 @@ public class CarrinhoService {
 
     public Carrinho buscarCarrinhoPorId(Integer id) throws RegraDeNegocioException {
         return carrinhoRepository.findById(id)
-                .orElseThrow(() -> new RegraDeNegocioException("Carrinho não encontrado com o ID: " + id));
+                .orElseThrow(() -> new RegraDeNegocioException("Carrinho não encontrado"));
     }
 
     public Carrinho buscarCarrinhoUsuarioLogado() throws RegraDeNegocioException {
@@ -45,6 +45,10 @@ public class CarrinhoService {
     }
 
     public CarrinhoDTO criarCarrinho(CarrinhoCreateDTO carrinhoCreateDTO) throws RegraDeNegocioException {
+        if (carrinhoCreateDTO.getItens() == null || carrinhoCreateDTO.getItens().isEmpty()) {
+            throw new RegraDeNegocioException("Não é possível criar um carrinho sem itens");
+        }
+
         Carrinho carrinho = buscarCarrinhoUsuarioLogado();
         List<Item> itens = itemService.criarItens(carrinhoCreateDTO.getItens());
         carrinho.setItens(itens);
