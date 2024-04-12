@@ -52,9 +52,7 @@ class CarrinhoServiceTest {
     void naoDevebuscarCarrinhoPorIdInvalido() throws IOException {
         Carrinho carrinho = MockCarrinho.retornarEntity();
 
-        assertThrows(RegraDeNegocioException.class, () -> {
-            carrinhoService.buscarCarrinhoPorId(carrinho.getIdCarrinho());
-        }, "Carrinho não encontrado com o ID: " + carrinho.getIdCarrinho());
+        assertThrows(RegraDeNegocioException.class, () -> carrinhoService.buscarCarrinhoPorId(carrinho.getIdCarrinho()), "Carrinho não encontrado com o ID: " + carrinho.getIdCarrinho());
     }
 
     @Test
@@ -119,7 +117,7 @@ class CarrinhoServiceTest {
     }
 
     @Test
-    void calculoBrutoTotal() throws IOException, RegraDeNegocioException {
+    void calculoBrutoTotal() throws IOException {
         Carrinho carrinho = MockCarrinho.retornarEntity();
 
         BigDecimal total = carrinhoService.calcularValorBrutoTotal(carrinho);
@@ -173,13 +171,32 @@ class CarrinhoServiceTest {
         when(carrinhoRepository.save(carrinho)).thenReturn(carrinho);
         when(itemService.converterDTO(carrinho.getItens())).thenReturn(MockItem.retornarListaItemDTO());
 
+        CarrinhoDTO carrinhoResponse = carrinhoService.removerUmaUnidadeItemCarrinho(idItem);
+
+        assertNotNull(carrinhoResponse);
+        assertEquals(carrinho.getUsuario().getIdUsuario(), carrinhoResponse.getIdUsuario());
+        assertEquals(carrinho.getIdCarrinho(), carrinhoResponse.getIdCarrinho());
+        assertEquals(2, carrinho.getItens().size());
+
+    }
+
+    @Test
+    void removerUmaUnidadeItemCarrinho() throws IOException, RegraDeNegocioException {
+        Carrinho carrinho = MockCarrinho.retornarEntity();
+        Integer idItem = carrinho.getItens().get(0).getIdItem();
+
+        when(usuarioService.buscarUsuarioLogadoEntity()).thenReturn(carrinho.getUsuario());
+        when(carrinhoRepository.findByUsuario(carrinho.getUsuario())).thenReturn(carrinho);
+        when(itemService.buscarItemPorId(idItem)).thenReturn(carrinho.getItens().get(0));
+        when(carrinhoRepository.save(carrinho)).thenReturn(carrinho);
+        when(itemService.converterDTO(carrinho.getItens())).thenReturn(MockItem.retornarListaItemDTO());
+
         CarrinhoDTO carrinhoResponse = carrinhoService.removerItemCarrinho(idItem);
 
         assertNotNull(carrinhoResponse);
         assertEquals(carrinho.getUsuario().getIdUsuario(), carrinhoResponse.getIdUsuario());
         assertEquals(carrinho.getIdCarrinho(), carrinhoResponse.getIdCarrinho());
         assertEquals(1, carrinho.getItens().size());
-
     }
 
     @Test
