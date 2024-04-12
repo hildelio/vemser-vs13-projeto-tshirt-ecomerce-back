@@ -29,7 +29,7 @@ public class EnderecoCreateDTO {
 
     @Schema(description = "numero do endereço da pessoa", example = "125", required = true)
     @NotNull(message = "por favor preencha o numero corretamente")
-    private Integer numero;
+    private String numero;
 
     @Schema(description = "complemente da casa da pessoa", example = "1")
     private String complemento;
