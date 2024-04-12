@@ -54,7 +54,7 @@ public class ProdutoController implements ProdutoControllerInterface {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deletarProduto(@PathVariable("id") @NotNull Integer id) throws RegraDeNegocioException {
-        return new ResponseEntity<>(produtoService.deletarProduto(id), HttpStatus.OK);
+        return new ResponseEntity<>(produtoService.deletarProduto(id), HttpStatus.NO_CONTENT);
     }
 
 }

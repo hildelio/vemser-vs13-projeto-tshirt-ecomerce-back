@@ -58,6 +58,11 @@ public class ProdutoService {
 
     public String deletarProduto(Integer id) throws RegraDeNegocioException {
         Produto produto = buscarPorId(id);
+
+        if (produto.getAtivo().equals("0")) {
+            throw new RegraDeNegocioException("Produto já foi deletado");
+        }
+
         produto.setAtivo("0");
         produtoRepository.save(produto);
 
@@ -65,8 +70,7 @@ public class ProdutoService {
     }
 
     public Produto buscarPorId(Integer id) throws RegraDeNegocioException {
-        Produto produto = produtoRepository.findById(id).orElseThrow(() -> new RegraDeNegocioException(NAO_ENCONTRADO));
-        return produto;
+        return produtoRepository.findById(id).orElseThrow(() -> new RegraDeNegocioException(NAO_ENCONTRADO));
     }
 
 }
