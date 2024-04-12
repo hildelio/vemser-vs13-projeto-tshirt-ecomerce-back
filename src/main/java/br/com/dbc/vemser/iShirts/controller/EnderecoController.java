@@ -38,7 +38,12 @@ public class EnderecoController implements EnderecoControllerInterface {
     }
 
     public ResponseEntity<EnderecoDTO> salvarEndereco(  EnderecoCreateDTO dto) throws RegraDeNegocioException {
-        return new ResponseEntity<>(this.enderecoService.salvarEndereco(dto), HttpStatus.CREATED);
+       try {
+           Integer.parseInt(dto.getNumero());
+           return new ResponseEntity<>(this.enderecoService.salvarEndereco(dto), HttpStatus.CREATED);
+       } catch (NumberFormatException e) {
+           throw new RegraDeNegocioException("O campo número deve ser um número inteiro");
+       }
     }
 
     public ResponseEntity<EnderecoDTO> editarEndereco(  EnderecoCreateDTO dto, Integer idEndereco) throws RegraDeNegocioException {
