@@ -3,6 +3,7 @@ package br.com.dbc.vemser.iShirts.service;
 import br.com.dbc.vemser.iShirts.dto.foto.FotoDTO;
 import br.com.dbc.vemser.iShirts.model.Foto;
 import br.com.dbc.vemser.iShirts.exceptions.RegraDeNegocioException;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import br.com.dbc.vemser.iShirts.model.Variacao;
 import br.com.dbc.vemser.iShirts.repository.FotoRepository;
 import br.com.dbc.vemser.iShirts.utils.MediaTypeUtil;
@@ -71,6 +72,11 @@ public class FotoService {
         String tipoArquivo = mediaTypeUtil.getTipoArquivo(arquivo);
         validarFormato(tipoArquivo);
         String nome = LocalDateTime.now() + "_" + arquivo.getOriginalFilename();
+
+        if (arquivo.getSize() > 3145728) {
+            throw new SizeLimitExceededException("Tamanho do arquivo excede o limite máximo de 3 MB", arquivo.getSize(), 3145728);
+        }
+
         if (nome.length() > 255) {
             throw new RegraDeNegocioException("Nome do arquivo é muito grande");
         }
