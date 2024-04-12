@@ -92,7 +92,12 @@ public class CarrinhoService {
 
     public CarrinhoDTO removerItemCarrinho(Integer idItem) throws RegraDeNegocioException {
         Carrinho carrinho = buscarCarrinhoUsuarioLogado();
+
         Item item = itemService.buscarItemPorId(idItem);
+
+        if (!carrinho.getItens().contains(item)) {
+            throw new RegraDeNegocioException("Não é possível deletar o item de outro usuário");
+        }
 
         carrinho.getItens().remove(item);
         itemService.delete(item);
