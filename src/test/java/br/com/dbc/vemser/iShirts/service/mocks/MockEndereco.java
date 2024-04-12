@@ -11,7 +11,7 @@ import java.util.Random;
 public class MockEndereco {
     public static Endereco retornaEntity(){
         Pessoa pessoa = MockPessoa.retornarEntity();
-        return new Endereco(new Random().nextInt(), pessoa, pessoa.getIdPessoa(), "Rua teste", 1, "Complemento teste", "Referencia teste",
+        return new Endereco(new Random().nextInt(), pessoa, pessoa.getIdPessoa(), "Rua teste", "1", "Complemento teste", "Referencia teste",
         "Bairro teste", "Cidade teste", "00000-000", "Estado teste", "Pais teste", new Timestamp(1), new Timestamp(1));
     }
     public static EnderecoDTO retornaDTO(){
@@ -19,7 +19,7 @@ public class MockEndereco {
                 "Bairro teste", "Cidade teste", "00000-000", "Estado teste", "Pais teste", new Timestamp(1), new Timestamp(1));
     }
     public static EnderecoCreateDTO retornaCreate(){
-        return new EnderecoCreateDTO(new Random().nextInt(),"Rua teste", 1, "Complemento teste", "Referencia teste",
+        return new EnderecoCreateDTO(new Random().nextInt(),"Rua teste", "1", "Complemento teste", "Referencia teste",
                 "Bairro teste", "00000-000", "Cidade teste", "Estado teste", "Pais teste", new Timestamp(1), new Timestamp(1));
     }
 }
