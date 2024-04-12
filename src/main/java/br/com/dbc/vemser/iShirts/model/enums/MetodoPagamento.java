@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum MetodoPagamento {
     CARTAO(0),
     PIX(1),
-    DINHEIRO(2);
+    BOLETO(2);
 
     private final int index;
 

@@ -62,7 +62,7 @@ public class PedidoService {
 
     public PedidoDTO editarPedido(Integer idPedido, PedidoUpdateDTO pedidoUpdateDTO) throws RegraDeNegocioException {
         Pedido pedidoEditado = getPedido(idPedido);
-        pedidoEditado.setStatus(pedidoEditado.getStatus());
+        pedidoEditado.setStatus(pedidoUpdateDTO.getStatus());
         pedidoEditado.setMetodoPagamento(pedidoUpdateDTO.getMetodoPagamento());
 
         return retornaPedidoDTO(pedidoRepository.save(pedidoEditado));
