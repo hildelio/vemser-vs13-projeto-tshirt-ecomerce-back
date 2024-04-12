@@ -68,5 +68,20 @@ public class Endereco {
     private Timestamp editadoEm;
 
 
-
+    public Endereco(int idEndereco, Pessoa pessoa, Integer idPessoa, String ruaTeste, String number, String complementoTeste, String referenciaTeste, String bairroTeste, String cidadeTeste, String cep, String estadoTeste, String paisTeste, Timestamp criadoEm, Timestamp editadoEm) {
+        this.idEndereco = idEndereco;
+        this.pessoa = pessoa;
+        this.idPessoa = idPessoa;
+        this.logradouro = ruaTeste;
+        this.numero = Integer.valueOf(number);
+        this.complemento = complementoTeste;
+        this.referencia = referenciaTeste;
+        this.bairro = bairroTeste;
+        this.cidade = cidadeTeste;
+        this.cep = cep;
+        this.estado = estadoTeste;
+        this.pais = paisTeste;
+        this.criadoEm = criadoEm;
+        this.editadoEm = editadoEm;
+    }
 }
