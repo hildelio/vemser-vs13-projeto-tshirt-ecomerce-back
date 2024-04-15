@@ -123,4 +123,28 @@ public class CupomServiceTest {
 
         verify(cupomRepository, times(1)).deleteById(cupomMock.getIdCupom());
     }
+
+    @Test
+    @DisplayName("Deveria buscar o cupom por ID com sucesso")
+    void deveriaRetornarCupomComSucesso() throws RegraDeNegocioException {
+        Integer idCupom = 1;
+        Cupom cupom = MockCupom.retornarCupom();
+
+        when(cupomRepository.findById(idCupom)).thenReturn(Optional.of(cupom));
+
+        Cupom cupomRetornado = cupomService.getCupom(idCupom);
+
+        assertNotNull(cupomRetornado);
+        assertEquals(cupom, cupomRetornado);
+    }
+
+    @Test
+    @DisplayName("Não deveria buscar o cupom por ID quando o cupom não existe")
+    void deveriaLancarExcecaoQuandoOcupomNaoExistir() {
+        Integer idCupom = 1;
+
+        when(cupomRepository.findById(idCupom)).thenReturn(Optional.empty());
+
+        assertThrows(RegraDeNegocioException.class, () -> cupomService.getCupom(idCupom));
+    }
 }

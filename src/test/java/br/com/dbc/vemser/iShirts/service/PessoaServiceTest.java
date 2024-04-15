@@ -291,4 +291,20 @@ public class PessoaServiceTest {
         verify(pessoaRepository, times(1)).delete(pessoa);
     }
 
+    @Test
+    @DisplayName("Deveria buscar a pessoa por usuário com sucesso")
+    void deveriaBuscarPessoaPorUsuario() {
+        Usuario usuario = new Usuario();
+        usuario.setIdUsuario(1);
+        Pessoa pessoaEsperada = new Pessoa();
+        pessoaEsperada.setIdPessoa(1);
+
+        when(pessoaRepository.findPessoaByUsuario(usuario)).thenReturn(pessoaEsperada);
+
+        Pessoa pessoaRetornada = pessoaService.buscarPessoaPorUsuario(usuario);
+
+        assertNotNull(pessoaRetornada);
+        assertEquals(pessoaEsperada, pessoaRetornada);
+    }
+
 }
