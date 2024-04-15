@@ -75,5 +75,5 @@ public interface EnderecoControllerInterface {
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção.")
     })
     @DeleteMapping("/{idEndereco}")
-    public ResponseEntity<Void>deletar(Integer idEndereco) throws RegraDeNegocioException;
+    public ResponseEntity<Void> deletar(Integer idEndereco) throws RegraDeNegocioException;
 }

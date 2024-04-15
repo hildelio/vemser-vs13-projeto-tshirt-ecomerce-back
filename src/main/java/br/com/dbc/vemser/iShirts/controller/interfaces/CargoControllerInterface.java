@@ -42,5 +42,5 @@ public interface CargoControllerInterface {
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso."),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção.")
     })
-    ResponseEntity<String> deletar(@PathVariable Integer idCargo) throws RegraDeNegocioException;
+    ResponseEntity<Void> deletar(@PathVariable Integer idCargo) throws RegraDeNegocioException;
 }

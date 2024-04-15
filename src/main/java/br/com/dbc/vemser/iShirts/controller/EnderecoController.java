@@ -50,8 +50,8 @@ public class EnderecoController implements EnderecoControllerInterface {
         return ResponseEntity.ok().body(this.enderecoService.editarEndereco(dto,idEndereco));
     }
 
-    public ResponseEntity<Void>deletar(Integer idEndereco) throws RegraDeNegocioException {
-        this.enderecoService.deletar(idEndereco);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Void> deletar(Integer idEndereco) throws RegraDeNegocioException {
+        this.enderecoService.deletarEndereco(idEndereco);
+        return ResponseEntity.noContent().build();
     }
 }
