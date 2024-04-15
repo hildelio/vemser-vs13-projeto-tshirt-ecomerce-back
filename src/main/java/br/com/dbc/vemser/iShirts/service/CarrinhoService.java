@@ -60,8 +60,8 @@ public class CarrinhoService {
         return converterDTO(carrinhoRepository.save(carrinho));
     }
 
-    public void deleteCarrinho(Integer id) throws RegraDeNegocioException {
-        Carrinho carrinho = buscarCarrinhoPorId(id);
+    public void deleteCarrinho() throws RegraDeNegocioException {
+        Carrinho carrinho = buscarCarrinhoUsuarioLogado();
         carrinhoRepository.delete(carrinho);
     }
 
