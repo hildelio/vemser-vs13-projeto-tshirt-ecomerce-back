@@ -74,7 +74,7 @@ public class PedidoService {
         pedidoRepository.save(pedido);
     }
 
-    private BigDecimal validarCupom(BigDecimal valorCarrinho, Integer idCupom) throws RegraDeNegocioException {
+    public BigDecimal validarCupom(BigDecimal valorCarrinho, Integer idCupom) throws RegraDeNegocioException {
         Cupom cupom = getCupom(idCupom);
         if(cupom == null){
             return valorCarrinho;
@@ -87,7 +87,7 @@ public class PedidoService {
         return valorCarrinho.subtract(BigDecimal.valueOf(cupom.getValorMinimo()));
     }
 
-    private Pedido montarPedido(Usuario usuario, PedidoCreateDTO pedidoCreateDTO, Carrinho carrinho) throws RegraDeNegocioException {
+    Pedido montarPedido(Usuario usuario, PedidoCreateDTO pedidoCreateDTO, Carrinho carrinho) throws RegraDeNegocioException {
         Pedido pedido = new Pedido();
         pedido.setPessoa(pessoaService.buscarPessoaPorUsuario(usuario));
         pedido.setMetodoPagamento(pedidoCreateDTO.getMetodoPagamento());

@@ -153,7 +153,7 @@ class EnderecoServiceTest {
 
         when(enderecoRepository.findById(anyInt())).thenReturn(Optional.of(endereco));
 
-        enderecoService.deletar(idEndereco);
+        enderecoService.deletarEndereco(idEndereco);
 
         verify(enderecoRepository, times(1)).deleteById(anyInt());
     }

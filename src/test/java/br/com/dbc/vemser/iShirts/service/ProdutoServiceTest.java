@@ -79,7 +79,6 @@ class ProdutoServiceTest {
 
     }
 
-
     @Test
     void naoDeveListaProdutoInativo() throws IOException, RegraDeNegocioException {
         Produto produto = MockProduto.retornarEntity();
@@ -127,14 +126,26 @@ class ProdutoServiceTest {
     @Test
     void deletarProduto() throws IOException, RegraDeNegocioException {
         Produto produto = MockProduto.retornarEntity();
+        produto.setAtivo("1");
 
         when(produtoRepository.findById(produto.getIdProduto())).thenReturn(Optional.of(produto));
 
-        String response = produtoService.deletarProduto(produto.getIdProduto());
+        produtoService.deletarProduto(produto.getIdProduto());
 
         verify(produtoRepository, times(1)).save(produto);
-        assertEquals("Produto deletado com sucesso", response);
         assertEquals("0", produto.getAtivo());
+    }
+
+    @Test
+    void naoDeveriaDeletarProdutoJaDeletado() throws IOException, RegraDeNegocioException {
+        Produto produto = MockProduto.retornarEntity();
+        produto.setAtivo("0");
+
+        when(produtoRepository.findById(produto.getIdProduto())).thenReturn(Optional.of(produto));
+
+        assertThrows(RegraDeNegocioException.class, () -> {
+            produtoService.deletarProduto(produto.getIdProduto());
+        }, "Produto já foi deletado");
     }
 
 }

@@ -316,5 +316,99 @@ class UsuarioServiceTest {
         assertEquals(0, idUsuario);
     }
 
+    @Test
+    @DisplayName("Deveria buscar o usuário logado com sucesso")
+    void deveriaBuscarUsuarioLogadoEntity_UsuarioLogado_RetornaUsuario() throws RegraDeNegocioException {
+        Integer idUsuarioLogado = 1;
+        Usuario usuarioLogado = MockUsuario.retornarEntity();
+
+        Authentication authentication = mock(Authentication.class);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(String.valueOf(idUsuarioLogado));
+        SecurityContextHolder.setContext(securityContext);
+
+        when(usuarioRepository.findById(idUsuarioLogado)).thenReturn(Optional.of(usuarioLogado));
+
+        Usuario usuarioRetornado = usuarioService.buscarUsuarioLogadoEntity();
+
+        assertNotNull(usuarioRetornado);
+        assertEquals(usuarioLogado, usuarioRetornado);
+    }
+
+    @Test
+    @DisplayName("Não deveria buscar o usuário logado quando não há usuário logado")
+    void deveriaBuscarUsuarioLogadoEntity_UsuarioNaoLogado_LancaExcecao() {
+        Integer idUsuarioLogado = 1;
+
+        Authentication authentication = mock(Authentication.class);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(String.valueOf(idUsuarioLogado));
+        SecurityContextHolder.setContext(securityContext);
+
+        when(usuarioRepository.findById(idUsuarioLogado)).thenReturn(Optional.empty());
+
+        assertThrows(RegraDeNegocioException.class, () -> usuarioService.buscarUsuarioLogadoEntity());
+    }
+
+    @Test
+    @DisplayName("Deveria buscar o usuário por ID com sucesso")
+    void deveriaBuscarUsuarioPorIdComSucesso() throws RegraDeNegocioException {
+        Integer idUsuario = 1;
+        Usuario usuario = MockUsuario.retornarEntity();
+
+        when(usuarioRepository.findByIdWithCargos(idUsuario)).thenReturn(Optional.of(usuario));
+
+        Usuario usuarioRetornado = usuarioService.buscarUsuarioPorIdWithCargo(idUsuario);
+
+        assertNotNull(usuarioRetornado);
+        assertEquals(usuario, usuarioRetornado);
+    }
+
+    @Test
+    @DisplayName("Não deveria buscar o usuário por ID quando o usuário não existe")
+    void deveriaLancarExcecaoQuandoUsuarioPorIdIxesiste() {
+        Integer idUsuario = 1;
+
+        when(usuarioRepository.findByIdWithCargos(idUsuario)).thenReturn(Optional.empty());
+
+        assertThrows(RegraDeNegocioException.class, () -> usuarioService.buscarUsuarioPorIdWithCargo(idUsuario));
+    }
+
+    @Test
+    @DisplayName("Deveria retornar o ID do usuário logado")
+    void deveriaBuscarIdDoUsuarioLogado() {
+        Integer idUsuarioLogado = 1;
+
+        Authentication authentication = mock(Authentication.class);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        when(authentication.getPrincipal()).thenReturn(String.valueOf(idUsuarioLogado));
+        SecurityContextHolder.setContext(securityContext);
+
+        Integer idRetornado = usuarioService.getIdLoggedUser();
+
+        assertNotNull(idRetornado);
+        assertEquals(idUsuarioLogado, idRetornado);
+    }
+
+    @Test
+    @DisplayName("Deveria retornar o DTO do usuário logado")
+    void deveriaRetornarDTOtUsuarioLogado() throws RegraDeNegocioException {
+        Integer idUsuarioLogado = 1;
+        Usuario usuario = MockUsuario.retornarEntity();
+        UsuarioLoginDTO usuarioLoginDTO = new UsuarioLoginDTO();
+        usuarioLoginDTO.setEmail(usuario.getEmail());
+
+        when(usuarioRepository.findByIdWithCargos(idUsuarioLogado)).thenReturn(Optional.of(usuario));
+        when(objectMapper.convertValue(usuario, UsuarioLoginDTO.class)).thenReturn(usuarioLoginDTO);
+
+        UsuarioLoginDTO usuarioLoginDTORetornado = usuarioService.getUsuarioLogado(idUsuarioLogado);
+
+        assertNotNull(usuarioLoginDTORetornado);
+        assertEquals(usuarioLoginDTO, usuarioLoginDTORetornado);
+    }
+
 }
 
