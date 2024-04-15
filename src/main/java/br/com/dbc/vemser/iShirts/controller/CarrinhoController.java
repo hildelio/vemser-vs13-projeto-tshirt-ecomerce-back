@@ -6,13 +6,10 @@ import br.com.dbc.vemser.iShirts.dto.carrinho.CarrinhoDTO;
 import br.com.dbc.vemser.iShirts.dto.item.ItemCreateDTO;
 import br.com.dbc.vemser.iShirts.dto.item.ItemUpdateQuantidadeDTO;
 import br.com.dbc.vemser.iShirts.exceptions.RegraDeNegocioException;
-import br.com.dbc.vemser.iShirts.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import br.com.dbc.vemser.iShirts.model.Carrinho;
 import br.com.dbc.vemser.iShirts.service.CarrinhoService;
 
 import javax.validation.Valid;
@@ -43,15 +40,15 @@ public class CarrinhoController implements CarrinhoControllerInterface {
     }
 
     @DeleteMapping("/deletar")
-    public ResponseEntity<Void> deleteCarrinho() throws RegraDeNegocioException {
+    public ResponseEntity<Void> deleteCarrinho(@PathVariable Integer id) throws RegraDeNegocioException {
         carrinhoService.deleteCarrinho();
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @DeleteMapping("/limpar")
-    public ResponseEntity<Void> limparCarrinho() throws RegraDeNegocioException {
+    public ResponseEntity<String> limparCarrinho() throws RegraDeNegocioException {
         carrinhoService.limparCarrinho();
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).body("Itens do carrinho deletado com sucesso!");
     }
 
     @PostMapping("/adicionar-item")
@@ -69,6 +66,12 @@ public class CarrinhoController implements CarrinhoControllerInterface {
     @DeleteMapping("/remover-item/{idItem}")
     public ResponseEntity<CarrinhoDTO> removerItemCarrinho(@PathVariable Integer idItem) throws RegraDeNegocioException {
         CarrinhoDTO carrinho = carrinhoService.removerItemCarrinho(idItem);
+        return ResponseEntity.ok(carrinho);
+    }
+
+    @DeleteMapping("/remover-uma-unidade/{idItem}")
+    public ResponseEntity<CarrinhoDTO> removerUmaUnidadeItemCarrinho(@PathVariable Integer idItem) throws RegraDeNegocioException {
+        CarrinhoDTO carrinho = carrinhoService.removerUmaUnidadeItemCarrinho(idItem);
         return ResponseEntity.ok(carrinho);
     }
 }

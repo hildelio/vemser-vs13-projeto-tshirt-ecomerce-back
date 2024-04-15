@@ -19,6 +19,8 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import static java.lang.Integer.parseInt;
+
 
 @Service
 @RequiredArgsConstructor
@@ -81,7 +83,7 @@ public class EnderecoService {
         enderecoAtualizado.setComplemento(dto.getComplemento());
         enderecoAtualizado.setReferencia(dto.getReferencia());
         enderecoAtualizado.setLogradouro(dto.getLogradouro());
-        enderecoAtualizado.setNumero(dto.getNumero());
+        enderecoAtualizado.setNumero(parseInt(dto.getNumero()));
         enderecoAtualizado.setPais(dto.getPais());
         this.enderecoRepository.save(enderecoAtualizado);
         return retornarDTO(enderecoAtualizado);

@@ -54,7 +54,7 @@ public interface CarrinhoControllerInterface {
     })
 
     @DeleteMapping("/deletar")
-    public ResponseEntity<Void> deleteCarrinho() throws RegraDeNegocioException;
+    public ResponseEntity<Void> deleteCarrinho(@PathVariable Integer id) throws RegraDeNegocioException;
     @Operation(summary = "Limpa o carrinho do usuário logado", description = "Limpa o carrinho do usuário logado no sistema com os dados mais recentes.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Carrinho limpo com sucesso!"),
@@ -64,7 +64,7 @@ public interface CarrinhoControllerInterface {
     })
 
     @DeleteMapping("/limpar")
-    public ResponseEntity<Void> limparCarrinho() throws RegraDeNegocioException;
+    public ResponseEntity<String> limparCarrinho() throws RegraDeNegocioException;
     @Operation(summary = "Adiciona item no carrinho do usuário logado", description = "Adiciona item no  carrinho do usuário logado no sistema com os dados mais recentes.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Adição no carrinho realizada com sucesso!"),
