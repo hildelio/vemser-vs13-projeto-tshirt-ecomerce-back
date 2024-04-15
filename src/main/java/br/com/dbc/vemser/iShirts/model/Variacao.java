@@ -27,6 +27,9 @@ public class Variacao {
     @Column(name = "ID_VARIACAO")
     private Integer idVariacao;
 
+    @Column(name = "ID_PRODUTO", insertable = false, updatable = false)
+    private Integer idProduto;
+
     @ManyToOne
     @JoinColumn(name = "ID_PRODUTO", referencedColumnName = "ID_PRODUTO")
     @JsonIgnore
