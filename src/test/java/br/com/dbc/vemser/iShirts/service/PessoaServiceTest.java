@@ -65,18 +65,43 @@ public class PessoaServiceTest {
         pessoaService = new PessoaService(pessoaRepository, objectMapper, usuarioRepository, usuarioService);
     }
 
-    @DisplayName("Teste para cadastrar uma Pessoa")
     @Test
-    public void testarCadastrarPessoa() throws RegraDeNegocioException {
+    @DisplayName("Deveria cadastrar uma pessoa")
+    void deveriaCadastrarPessoa() throws RegraDeNegocioException {
         PessoaCreateDTO pessoaCreateDTO = MockPessoa.retornarPessoaCreateDTO();
-
+        Integer idUsuarioLogado = 1;
+        Usuario usuario = new Usuario();
+        usuario.setIdUsuario(idUsuarioLogado);
         Pessoa pessoa = MockPessoa.retornarEntity();
 
+        when(usuarioService.getIdLoggedUser()).thenReturn(idUsuarioLogado);
+        when(usuarioRepository.findById(idUsuarioLogado)).thenReturn(Optional.of(usuario));
+        when(pessoaRepository.findPessoaByUsuario(usuario)).thenReturn(null);
+        when(objectMapper.convertValue(pessoaCreateDTO, Pessoa.class)).thenReturn(pessoa);
         when(pessoaRepository.save(any(Pessoa.class))).thenReturn(pessoa);
 
         Pessoa pessoaCadastrada = pessoaService.cadastrarPessoa(pessoaCreateDTO);
 
+        assertNotNull(pessoaCadastrada);
         assertEquals(pessoa, pessoaCadastrada);
+    }
+
+    @Test
+    @DisplayName("Deveria lançar exceção quando a pessoa já existe")
+    void deveriaLancarExcecaoQuandoPessoaJaExiste() {
+        PessoaCreateDTO pessoaCreateDTO = MockPessoa.retornarPessoaCreateDTO();
+        Integer idUsuarioLogado = 1;
+
+        Usuario usuario = new Usuario();
+        usuario.setIdUsuario(idUsuarioLogado);
+
+        Pessoa pessoaExistente = new Pessoa();
+
+        when(usuarioService.getIdLoggedUser()).thenReturn(idUsuarioLogado);
+        when(usuarioRepository.findById(idUsuarioLogado)).thenReturn(Optional.of(usuario));
+        when(pessoaRepository.findPessoaByUsuario(usuario)).thenReturn(pessoaExistente);
+
+        assertThrows(RegraDeNegocioException.class, () -> pessoaService.cadastrarPessoa(pessoaCreateDTO));
     }
 
     @DisplayName("Teste para atualizar uma Pessoa")
