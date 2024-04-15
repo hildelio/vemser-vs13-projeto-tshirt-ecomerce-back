@@ -40,7 +40,7 @@ public class CarrinhoController implements CarrinhoControllerInterface {
     }
 
     @DeleteMapping("/deletar")
-    public ResponseEntity<Void> deleteCarrinho(@PathVariable Integer id) throws RegraDeNegocioException {
+    public ResponseEntity<Void> deleteCarrinho() throws RegraDeNegocioException {
         carrinhoService.deleteCarrinho();
         return ResponseEntity.status(HttpStatus.OK).build();
     }
