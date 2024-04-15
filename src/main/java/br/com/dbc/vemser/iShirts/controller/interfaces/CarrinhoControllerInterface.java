@@ -52,8 +52,9 @@ public interface CarrinhoControllerInterface {
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso."),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção.")
     })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCarrinho(@PathVariable Integer id) throws RegraDeNegocioException;
+
+    @DeleteMapping("/deletar")
+    public ResponseEntity<Void> deleteCarrinho() throws RegraDeNegocioException;
     @Operation(summary = "Limpa o carrinho do usuário logado", description = "Limpa o carrinho do usuário logado no sistema com os dados mais recentes.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Carrinho limpo com sucesso!"),
@@ -61,7 +62,8 @@ public interface CarrinhoControllerInterface {
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso."),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção.")
     })
-    @DeleteMapping()
+
+    @DeleteMapping("/limpar")
     public ResponseEntity<String> limparCarrinho() throws RegraDeNegocioException;
     @Operation(summary = "Adiciona item no carrinho do usuário logado", description = "Adiciona item no  carrinho do usuário logado no sistema com os dados mais recentes.")
     @ApiResponses(value = {

@@ -39,12 +39,13 @@ public class CarrinhoController implements CarrinhoControllerInterface {
         return ResponseEntity.ok(carrinhoAtualizado);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCarrinho(@PathVariable Integer id) throws RegraDeNegocioException {
-        carrinhoService.deleteCarrinho(id);
+    @DeleteMapping("/deletar")
+    public ResponseEntity<Void> deleteCarrinho() throws RegraDeNegocioException {
+        carrinhoService.deleteCarrinho();
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-    @DeleteMapping()
+
+    @DeleteMapping("/limpar")
     public ResponseEntity<String> limparCarrinho() throws RegraDeNegocioException {
         carrinhoService.limparCarrinho();
         return ResponseEntity.status(HttpStatus.OK).body("Itens do carrinho deletado com sucesso!");
