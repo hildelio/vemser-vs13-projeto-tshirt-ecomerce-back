@@ -44,11 +44,9 @@ public class CupomService {
         return converterDTO(cupomRepository.save(cupom));
     }
 
-    public String deletar(Integer idCupom) throws RegraDeNegocioException {
+    public void deletar(Integer idCupom) throws RegraDeNegocioException {
         buscarPorId(idCupom);
         cupomRepository.deleteById(idCupom);
-
-        return "Cupom deletado com sucesso!";
     }
 
     public Cupom getCupom(Integer idCupom) throws RegraDeNegocioException {
