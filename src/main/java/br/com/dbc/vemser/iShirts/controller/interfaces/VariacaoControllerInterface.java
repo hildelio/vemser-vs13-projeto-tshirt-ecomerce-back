@@ -69,7 +69,7 @@ public interface VariacaoControllerInterface {
             @ApiResponse(responseCode = "404", description = "Variação não encontrada."),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção.")
     })
-    ResponseEntity<String> deletarVariacao(@PathVariable("id") Integer id) throws Exception;
+    ResponseEntity<Void> deletarVariacao(@PathVariable("id") Integer id) throws Exception;
 
     @Operation(summary = "Ativar uma variação por ID", description = "Ativa uma variação por ID.")
     @ApiResponses(value = {

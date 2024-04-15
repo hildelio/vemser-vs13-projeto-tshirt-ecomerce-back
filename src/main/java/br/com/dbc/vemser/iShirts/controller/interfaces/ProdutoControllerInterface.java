@@ -69,7 +69,7 @@ public interface ProdutoControllerInterface {
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção.")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletarProduto(@PathVariable("id") @NotNull Integer id) throws RegraDeNegocioException;
+    public ResponseEntity<Void> deletarProduto(@PathVariable("id") @NotNull Integer id) throws RegraDeNegocioException;
 
 
 

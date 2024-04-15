@@ -89,12 +89,10 @@ public class EnderecoService {
         return retornarDTO(enderecoAtualizado);
     }
 
-    public void deletar(Integer idEndereco) throws RegraDeNegocioException {
+    public void deletarEndereco(Integer idEndereco) throws RegraDeNegocioException {
         buscarPorId(idEndereco);
         this.enderecoRepository.deleteById(idEndereco);
     }
-
-
 
     private Endereco retornarEntidade(EnderecoCreateDTO dto) throws RegraDeNegocioException {
         Endereco endereco = this.objectMapper.convertValue(dto,Endereco.class);

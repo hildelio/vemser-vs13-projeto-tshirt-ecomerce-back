@@ -56,7 +56,7 @@ public class ProdutoService {
         return objectMapper.convertValue(produtoSalvo, ProdutoDTO.class);
     }
 
-    public String deletarProduto(Integer id) throws RegraDeNegocioException {
+    public void deletarProduto(Integer id) throws RegraDeNegocioException {
         Produto produto = buscarPorId(id);
 
         if (produto.getAtivo().equals("0")) {
@@ -66,7 +66,6 @@ public class ProdutoService {
         produto.setAtivo("0");
         produtoRepository.save(produto);
 
-        return "Produto deletado com sucesso";
     }
 
     public Produto buscarPorId(Integer id) throws RegraDeNegocioException {
