@@ -132,9 +132,10 @@ class CarrinhoServiceTest {
     void deleteCarrinho() throws IOException, RegraDeNegocioException {
         Carrinho carrinho = MockCarrinho.retornarEntity();
 
-        when(carrinhoRepository.findById(carrinho.getIdCarrinho())).thenReturn(Optional.of(carrinho));
+        when(usuarioService.buscarUsuarioLogadoEntity()).thenReturn(carrinho.getUsuario());
+        when(carrinhoRepository.findByUsuario(carrinho.getUsuario())).thenReturn(carrinho);
 
-        carrinhoService.deleteCarrinho(carrinho.getIdCarrinho());
+        carrinhoService.deleteCarrinho();
 
         verify(carrinhoRepository, times(1)).delete(carrinho);
     }

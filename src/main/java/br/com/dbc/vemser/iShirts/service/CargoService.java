@@ -34,12 +34,11 @@ public class CargoService {
         }
     }
 
-    public String deletarCargo(Integer idCargo) throws RegraDeNegocioException {
+    public void deletarCargo(Integer idCargo) throws RegraDeNegocioException {
         Cargo cargo = cargoRepository.findById(idCargo)
                 .orElseThrow(() -> new RegraDeNegocioException("Cargo não encontrado!"));
 
         cargoRepository.delete(cargo);
-        return MensagemRetorno.EXCLUIDA_COM_SUCESSO.getMensagemRetorno();
     }
 
     public List<CargoDTO> listarCargos() throws Exception {
