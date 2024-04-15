@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -36,6 +37,13 @@ public class PessoaService {
 
     public Pessoa cadastrarPessoa(PessoaCreateDTO pessoaCreateDTO) throws RegraDeNegocioException {
         validarPessoa(pessoaCreateDTO);
+
+        Integer idUsuarioLogado = usuarioService.getIdLoggedUser();
+        Optional<Usuario> usuario = usuarioRepository.findById(idUsuarioLogado);
+        Pessoa pessoaExistente = pessoaRepository.findPessoaByUsuario(usuario.get());
+        if (pessoaExistente != null) {
+            throw new RegraDeNegocioException("Usuário já possui uma pessoa cadastrada");
+        }
 
         Pessoa pessoa = objectMapper.convertValue(pessoaCreateDTO, Pessoa.class);
 
