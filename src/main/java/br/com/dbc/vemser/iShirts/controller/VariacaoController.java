@@ -49,9 +49,9 @@ public class VariacaoController implements VariacaoControllerInterface {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deletarVariacao(@PathVariable("id") Integer id) throws Exception {
+    public ResponseEntity<Void> deletarVariacao(@PathVariable("id") Integer id) throws Exception {
         variacaoService.deletarVariacao(id);
-        return new ResponseEntity<>("Variação deletada com sucesso", HttpStatus.OK);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/desativar/{idProduto}")

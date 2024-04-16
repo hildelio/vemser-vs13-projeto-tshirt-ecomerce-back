@@ -22,12 +22,12 @@ import java.util.stream.Collectors;
 public class EnderecoController implements EnderecoControllerInterface {
 
     private final EnderecoService enderecoService;
-
-   public ResponseEntity<Page<EnderecoDTO>> listarTodos( Integer tamanhoPagina,  Integer paginaSolicitada ){
+    @Override
+   public ResponseEntity<Page<EnderecoDTO>> listarTodos(@RequestParam Integer tamanhoPagina,@RequestParam  Integer paginaSolicitada ){
     return ResponseEntity.ok(this.enderecoService.listarTodos(tamanhoPagina,paginaSolicitada));
    }
-
-   public ResponseEntity<EnderecoDTO> buscarPorIdDto( Integer idEndereco) throws RegraDeNegocioException {
+    @Override
+   public ResponseEntity<EnderecoDTO> buscarPorIdDto(@PathVariable Integer idEndereco) throws RegraDeNegocioException {
         return ResponseEntity.ok(this.enderecoService.buscarPorIdDto(idEndereco));
    }
 
@@ -36,8 +36,8 @@ public class EnderecoController implements EnderecoControllerInterface {
         Page<EnderecoDTO> enderecos = this.enderecoService.listarPorPessoa(idPessoa, tamanhoPagina, paginaSolicitada);
         return ResponseEntity.ok(enderecos);
     }
-
-    public ResponseEntity<EnderecoDTO> salvarEndereco(  EnderecoCreateDTO dto) throws RegraDeNegocioException {
+    @Override
+    public ResponseEntity<EnderecoDTO> salvarEndereco(@RequestBody @Valid EnderecoCreateDTO dto) throws RegraDeNegocioException {
        try {
            Integer.parseInt(dto.getNumero());
            return new ResponseEntity<>(this.enderecoService.salvarEndereco(dto), HttpStatus.CREATED);
@@ -45,13 +45,13 @@ public class EnderecoController implements EnderecoControllerInterface {
            throw new RegraDeNegocioException("O campo número deve ser um número inteiro");
        }
     }
-
-    public ResponseEntity<EnderecoDTO> editarEndereco(  EnderecoCreateDTO dto, Integer idEndereco) throws RegraDeNegocioException {
+    @Override
+    public ResponseEntity<EnderecoDTO> editarEndereco(@RequestBody @Valid EnderecoCreateDTO dto,@PathVariable Integer idEndereco) throws RegraDeNegocioException {
         return ResponseEntity.ok().body(this.enderecoService.editarEndereco(dto,idEndereco));
     }
-
-    public ResponseEntity<Void>deletar(Integer idEndereco) throws RegraDeNegocioException {
-        this.enderecoService.deletar(idEndereco);
-        return ResponseEntity.ok().build();
+    @Override
+    public ResponseEntity<Void> deletar(@PathVariable Integer idEndereco) throws RegraDeNegocioException {
+        this.enderecoService.deletarEndereco(idEndereco);
+        return ResponseEntity.noContent().build();
     }
 }

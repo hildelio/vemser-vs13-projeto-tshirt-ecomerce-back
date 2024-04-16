@@ -13,6 +13,8 @@ public class VariacaoDTO {
 
     private Integer idVariacao;
 
+    private Integer idProduto;
+
     private List<Foto> foto;
 
     private String sku;

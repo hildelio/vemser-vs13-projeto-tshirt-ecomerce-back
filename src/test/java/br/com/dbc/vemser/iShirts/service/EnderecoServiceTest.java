@@ -20,6 +20,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -47,8 +49,6 @@ class EnderecoServiceTest {
     @Test
     void deveriaListarTodoEndereco(){
         Page<Endereco> pageEnitty = new PageImpl<>(List.of(MockEndereco.retornaEntity()));
-        Page<EnderecoDTO> pageDTO = new PageImpl<>(List.of(MockEndereco.retornaDTO()));
-        Endereco enderecoEntity = MockEndereco.retornaEntity();
         EnderecoDTO enderecoDTO = MockEndereco.retornaDTO();
         Pageable pageable = PageRequest.of(1, 1);
 
@@ -72,6 +72,19 @@ class EnderecoServiceTest {
         Page<EnderecoDTO> pageCurrent = enderecoService.listarPorPessoa(1, 1, 1);
         assertNotNull(pageCurrent);
         assertEquals(pageCurrent.get().toList().get(0).getComplemento(), "Complemento teste");
+    }
+
+    @DisplayName("Deveria lançar uma exceção ao tentar listar endereço por pessoa")
+    @Test
+    void deveriaLancaExcecaoListarEnderecoPessoa(){
+        Page<Endereco> pageEnitty = new PageImpl<>(List.of());
+
+        when(enderecoRepository.findAllByIdPessoaIs(any(), any())).thenReturn(pageEnitty);
+
+        assertThrows(RegraDeNegocioException.class, () -> {
+            enderecoService.listarPorPessoa(1, 1, 1);
+        });
+
     }
 
     @DisplayName("Deveria salvar um endereço")
@@ -153,7 +166,7 @@ class EnderecoServiceTest {
 
         when(enderecoRepository.findById(anyInt())).thenReturn(Optional.of(endereco));
 
-        enderecoService.deletar(idEndereco);
+        enderecoService.deletarEndereco(idEndereco);
 
         verify(enderecoRepository, times(1)).deleteById(anyInt());
     }

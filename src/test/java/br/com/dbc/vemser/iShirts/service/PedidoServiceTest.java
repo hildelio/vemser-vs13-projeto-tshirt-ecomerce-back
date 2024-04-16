@@ -1,26 +1,18 @@
 package br.com.dbc.vemser.iShirts.service;
 
-import br.com.dbc.vemser.iShirts.dto.carrinho.CarrinhoCreateDTO;
-import br.com.dbc.vemser.iShirts.dto.carrinho.CarrinhoDTO;
 import br.com.dbc.vemser.iShirts.dto.pedido.PedidoCreateDTO;
 import br.com.dbc.vemser.iShirts.dto.pedido.PedidoDTO;
 import br.com.dbc.vemser.iShirts.dto.pedido.PedidoUpdateDTO;
-import br.com.dbc.vemser.iShirts.dto.produto.ProdutoDTO;
-import br.com.dbc.vemser.iShirts.dto.usuario.UsuarioDTO;
-import br.com.dbc.vemser.iShirts.dto.variacao.VariacaoDTO;
 import br.com.dbc.vemser.iShirts.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.iShirts.model.*;
-import br.com.dbc.vemser.iShirts.model.enums.StatusPedido;
 import br.com.dbc.vemser.iShirts.repository.PedidoRepository;
 import br.com.dbc.vemser.iShirts.service.mocks.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -29,7 +21,6 @@ import org.springframework.data.domain.Pageable;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -81,32 +72,6 @@ class PedidoServiceTest {
 
     }
 
-
-//        @Test
-//    void criarPedido() throws IOException, RegraDeNegocioException {
-//        Usuario usuario = MockUsuario.retornarEntity();
-//        Carrinho carrinho = MockCarrinho.retornarEntity();
-//        CarrinhoDTO carrinhoDTO = MockCarrinho.retornarCarrinhoDTO(carrinho);
-//        Pedido pedido = MockPedido.retornarEntity();
-//        PedidoDTO pedidoDTO = MockPedido.retornarPedidoDTO();
-//
-//        when(carrinhoService.criarCarrinho(any())).thenReturn(carrinhoDTO);
-//        when(usuarioService.buscarUsuarioLogadoEntity()).thenReturn(usuario);
-//        when(carrinhoService.atualizarCarrinho()).thenReturn(carrinhoDTO);
-//        when(carrinhoService.buscarCarrinhoUsuarioLogado()).thenReturn(carrinho);
-//        when(pedidoRepository.save(any())).thenReturn(pedido);
-//        doNothing().when(carrinhoService).limparCarrinhoPedidoFeito();
-//        when(objectMapper.convertValue(any(), eq(PedidoDTO.class))).thenReturn(pedidoDTO);
-//
-//        PedidoDTO pedidoCriado = pedidoService.criarPedido(MockPedido.retornarPedidoCreateDTO());
-//
-//
-//        verify(usuarioService, times(1)).buscarUsuarioLogadoEntity();
-//        verify(carrinhoService, times(1)).buscarCarrinhoUsuarioLogado();
-//        verify(carrinhoService, times(1)).limparCarrinhoPedidoFeito();
-//        assertEquals(pedidoCriado, pedidoDTO);
-//    }
-//
     @Test
     void editarPedido() throws IOException, RegraDeNegocioException {
         Pedido pedido = MockPedido.retornarEntity();
@@ -187,6 +152,29 @@ class PedidoServiceTest {
 
         assertNotEquals(pedidoExcluido.getStatus(), pedido.getStatus());
 
+    }
+
+    @Test
+    void deveriaValidarCupomValorCarrinhoMenorQueValorMinimoLancaExcecao() throws RegraDeNegocioException {
+        BigDecimal valorCarrinho = BigDecimal.valueOf(50);
+        Integer idCupom = 1;
+        Cupom cupom = MockCupom.retornarCupom();
+
+        when(cupomService.getCupom(idCupom)).thenReturn(cupom);
+
+        assertThrows(RegraDeNegocioException.class, () -> pedidoService.validarCupom(valorCarrinho, idCupom));
+    }
+
+    @Test
+    @DisplayName("Deveria lançar exceção quando o carrinho está vazio")
+    void deveriaLancarExcecaoQUandoOcarrinhoEstaVazio() {
+        Usuario usuario = MockUsuario.retornarEntity();
+        PedidoCreateDTO pedidoCreateDTO = new PedidoCreateDTO();
+        Carrinho carrinho = new Carrinho();
+
+        when(pessoaService.buscarPessoaPorUsuario(usuario)).thenReturn(new Pessoa());
+
+        assertThrows(RegraDeNegocioException.class, () -> pedidoService.montarPedido(usuario, pedidoCreateDTO, carrinho));
     }
 
 }
