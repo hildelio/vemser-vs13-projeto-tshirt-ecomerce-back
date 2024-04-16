@@ -26,6 +26,7 @@ public interface CarrinhoControllerInterface {
     })
     @GetMapping
     public ResponseEntity<CarrinhoDTO> buscarCarrinho() throws RegraDeNegocioException;
+
     @Operation(summary = "Criação do carrinho do usuário logado", description = "Criação do carrinho do usuário logado no sistema.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Criação do carrinho realizada com sucesso!"),
@@ -35,6 +36,7 @@ public interface CarrinhoControllerInterface {
     })
     @PostMapping
     public ResponseEntity<CarrinhoDTO> createCarrinho(@Valid @RequestBody CarrinhoCreateDTO carrinho) throws RegraDeNegocioException;
+
     @Operation(summary = "Atualização do carrinho do usuário logado", description = "Atualiza o carrinho do usuário logado no sistema com os dados mais recentes.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Atualização do carrinho realizada com sucesso!"),
@@ -45,16 +47,16 @@ public interface CarrinhoControllerInterface {
     @PutMapping
     public ResponseEntity<CarrinhoDTO> atualizarCarrinho() throws RegraDeNegocioException;
 
-    @Operation(summary = "Exclui um carrinho por id", description = "Exclui o carrinho do  sistema por id;")
+    @Operation(summary = "Excluir carrinho do usuário logado", description = "Exclui o carrinho do usuário logado;")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Exclusão do carrinho realizada com sucesso!"),
             @ApiResponse(responseCode = "400", description = "Erro na requisição."),
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso."),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção.")
     })
-
     @DeleteMapping("/deletar")
     public ResponseEntity<Void> deleteCarrinho() throws RegraDeNegocioException;
+
     @Operation(summary = "Limpa o carrinho do usuário logado", description = "Limpa o carrinho do usuário logado no sistema com os dados mais recentes.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Carrinho limpo com sucesso!"),
@@ -62,9 +64,9 @@ public interface CarrinhoControllerInterface {
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso."),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção.")
     })
-
     @DeleteMapping("/limpar")
     public ResponseEntity<String> limparCarrinho() throws RegraDeNegocioException;
+
     @Operation(summary = "Adiciona item no carrinho do usuário logado", description = "Adiciona item no  carrinho do usuário logado no sistema com os dados mais recentes.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Adição no carrinho realizada com sucesso!"),
@@ -72,9 +74,9 @@ public interface CarrinhoControllerInterface {
             @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso."),
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção.")
     })
-
     @PostMapping("/adicionar-item")
     public ResponseEntity<CarrinhoDTO> adicionarItemCarrinho(@Valid @RequestBody ItemCreateDTO itemCreateDTO) throws RegraDeNegocioException;
+
     @Operation(summary = "Atualização quantidade de um item no carrinho do usuário logado", description = "Atualização quantidade de um item no carrinho do usuário logado no sistema com os dados mais recentes.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Atualização do carrinho realizada com sucesso!"),
@@ -94,4 +96,14 @@ public interface CarrinhoControllerInterface {
     })
     @DeleteMapping("/remover-item/{idItem}")
     public ResponseEntity<CarrinhoDTO> removerItemCarrinho(@PathVariable Integer idItem) throws RegraDeNegocioException;
+
+    @Operation(summary = "Remover uma unidade por id do item (diminuir quantidade de itens caso tenha mais de um)", description = "Remove uma unidade por id do item (diminuir quantidade de itens caso tenha mais de um)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Atualização do carrinho realizada com sucesso!"),
+            @ApiResponse(responseCode = "400", description = "Erro na inserção de dados."),
+            @ApiResponse(responseCode = "403", description = "Você não tem permissão para acessar este recurso."),
+            @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção.")
+    })
+    @PutMapping
+    ResponseEntity<CarrinhoDTO> removerUmaUnidadeItemCarrinho(@PathVariable Integer idItem) throws RegraDeNegocioException;
 }
