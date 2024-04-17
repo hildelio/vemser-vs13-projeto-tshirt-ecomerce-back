@@ -27,6 +27,7 @@ public class VariacaoService {
         Produto produto = produtoService.buscarPorId(variacaoCreateDTO.getIdProduto());
 
         Variacao variacaoEntity = objectMapper.convertValue(variacaoCreateDTO, Variacao.class);
+        variacaoEntity.setAtivo(String.valueOf(1));
         variacaoEntity.setProduto(produto);
         Variacao variacaoSalva = variacaoRepository.save(variacaoEntity);
 

@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.iShirts.service;
 
+import br.com.dbc.vemser.iShirts.repository.VariacaoRepository;
 import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.mock.web.MockMultipartFile;
 import br.com.dbc.vemser.iShirts.dto.foto.FotoDTO;
@@ -35,6 +36,8 @@ class FotoServiceTest {
     @Mock
     private VariacaoService variacaoService;
     @Mock
+    private VariacaoRepository variacaoRepository;
+    @Mock
     private  MediaTypeUtil mediaTypeUtil;
     @InjectMocks
     private FotoService fotoService;
@@ -63,6 +66,7 @@ class FotoServiceTest {
         assertNotNull(fotoResponse);
         assertEquals(fotoEntity.getIdFoto(), fotoResponse.getIdFoto());
         assertEquals(fotoEntity.getArquivo(), fotoResponse.getArquivo());
+        verify(variacaoRepository, times(1)).save(variacao);
     }
 
     @Test
