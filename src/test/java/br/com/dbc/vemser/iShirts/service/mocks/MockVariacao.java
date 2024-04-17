@@ -48,7 +48,6 @@ public class MockVariacao {
         variacaoCreateDTO.setTamanho("GG");
         variacaoCreateDTO.setPreco(BigDecimal.valueOf(45.0));
         variacaoCreateDTO.setTaxaDesconto(0);
-        variacaoCreateDTO.setAtivo("1");
         variacaoCreateDTO.setIdProduto(1);
         return variacaoCreateDTO;
     }
