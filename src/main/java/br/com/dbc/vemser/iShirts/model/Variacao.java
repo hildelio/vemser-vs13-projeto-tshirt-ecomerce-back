@@ -39,6 +39,9 @@ public class Variacao {
     @Column(name = "ID_FOTO")
     private List<Foto> fotos = new ArrayList<>();
 
+    @Column(name = "ID_FOTO", insertable = false)
+    private Integer idFoto;
+
     @Column(name = "SKU")
     private String sku;
 
