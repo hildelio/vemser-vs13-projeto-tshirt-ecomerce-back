@@ -65,7 +65,7 @@ public interface CarrinhoControllerInterface {
             @ApiResponse(responseCode = "500", description = "Foi gerada uma exceção.")
     })
     @DeleteMapping("/limpar")
-    public ResponseEntity<String> limparCarrinho() throws RegraDeNegocioException;
+    public ResponseEntity<Void> limparCarrinho() throws RegraDeNegocioException;
 
     @Operation(summary = "Adiciona item no carrinho do usuário logado", description = "Adiciona item no  carrinho do usuário logado no sistema com os dados mais recentes.")
     @ApiResponses(value = {
