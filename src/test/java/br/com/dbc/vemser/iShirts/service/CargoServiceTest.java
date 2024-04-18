@@ -45,6 +45,14 @@ public class CargoServiceTest {
         verify(cargoRepository, times(1)).save(any(Cargo.class));
     }
 
+    @DisplayName("Deveria lançar uma exceção ao criar cargo")
+    @Test
+    void deveriaLancarExcecaoCriarCargo(){
+        when(cargoRepository.findByDescricao(anyString())).thenReturn(Optional.of(retornarCargoEntity()));
+        assertThrows(RegraDeNegocioException.class, () -> {cargoService.criarCargo(retornarCargoCreateDTO());
+        });
+    }
+
     @Test
     @DisplayName("Deve deletar cargo com sucesso")
     public void deletarCargoComSucesso() throws RegraDeNegocioException {
