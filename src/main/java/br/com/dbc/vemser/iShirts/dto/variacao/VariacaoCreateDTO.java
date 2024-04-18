@@ -3,6 +3,7 @@ package br.com.dbc.vemser.iShirts.dto.variacao;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -28,9 +29,11 @@ public class VariacaoCreateDTO {
 
     @Schema(description = "Preço da Variação", required = true, example = "100")
     @NotNull(message = "O preço não pode ser nulo")
+    @Min(value = 0, message = "O preço não pode ser negativo")
     private BigDecimal preco;
 
     @Schema(description = "Taxa de Desconto da Variação", required = true, example = "10")
     @NotNull(message = "A taxa de desconto não pode ser nula")
+    @Min(value = 0, message = "A taxa de desconto não pode ser negativa")
     private Integer taxaDesconto;
 }
