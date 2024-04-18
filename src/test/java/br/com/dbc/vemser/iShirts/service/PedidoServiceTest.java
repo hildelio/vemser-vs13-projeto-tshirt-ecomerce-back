@@ -5,6 +5,7 @@ import br.com.dbc.vemser.iShirts.dto.pedido.PedidoDTO;
 import br.com.dbc.vemser.iShirts.dto.pedido.PedidoUpdateDTO;
 import br.com.dbc.vemser.iShirts.exceptions.RegraDeNegocioException;
 import br.com.dbc.vemser.iShirts.model.*;
+import br.com.dbc.vemser.iShirts.model.enums.StatusPedido;
 import br.com.dbc.vemser.iShirts.repository.PedidoRepository;
 import br.com.dbc.vemser.iShirts.service.mocks.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -70,6 +72,47 @@ class PedidoServiceTest {
         verify(carrinhoService, times(1)).limparCarrinhoPedidoFeito();
         assertEquals(pedidoCriado, pedidoDTO);
 
+    }
+
+    @DisplayName("Deveria retorna um valor subtraido do valor minimo do cupom")
+    @Test
+    void deveriaRetornaValorSubtraidoMinimoCupom() throws RegraDeNegocioException {
+        BigDecimal valorCarrinho = BigDecimal.valueOf(1000);
+        Integer idCupom = new Random().nextInt();
+        Cupom cupom = MockCupom.retornarCupom();
+
+        when(cupomService.getCupom(anyInt())).thenReturn(cupom);
+
+        BigDecimal bigDecimalCurrent = pedidoService.validarCupom(valorCarrinho, idCupom);
+        assertEquals(0, bigDecimalCurrent.intValue());
+    }
+
+    @DisplayName("Deveria montar pedido com cupom nulo")
+    @Test
+    void deveriaMontarPedidoCupomNulo() throws IOException, RegraDeNegocioException {
+        Usuario usuario = MockUsuario.retornarEntity();
+        PedidoCreateDTO pedidoCreateDTO = MockPedido.retornarPedidoCreateDTO();
+        Carrinho carrinho = MockCarrinho.retornarEntity();
+        Cupom cupomMock = MockCupom.retornarCupom();
+        cupomMock.setValorMinimo(900.0);
+
+
+        when(pessoaService.buscarPessoaPorUsuario(usuario)).thenReturn(new Pessoa());
+        when(cupomService.getCupom(anyInt())).thenReturn(cupomMock);
+
+        Pedido pedidoCurrent = pedidoService.montarPedido(usuario, pedidoCreateDTO, carrinho);
+        assertNotNull(pedidoCurrent);
+        assertEquals(pedidoCurrent.getStatus(), StatusPedido.EM_ANDAMENTO);
+    }
+
+    @DisplayName("Deveria retornar o valor do carrinho ao tentar recuperar cupom")
+    @Test
+    void deveriaRetornaValorCarrinhoNuloRecuperarCupom() throws RegraDeNegocioException {
+        BigDecimal valorCarrinho = BigDecimal.valueOf(25);
+        BigDecimal bigDecimalCurrent = pedidoService.validarCupom(valorCarrinho, 0);
+
+        assertNotNull(bigDecimalCurrent);
+        assertEquals(bigDecimalCurrent.intValue(),valorCarrinho.intValue());
     }
 
     @Test
