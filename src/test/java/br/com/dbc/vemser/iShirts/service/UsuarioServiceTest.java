@@ -7,6 +7,7 @@ import br.com.dbc.vemser.iShirts.model.Cargo;
 import br.com.dbc.vemser.iShirts.model.Usuario;
 import br.com.dbc.vemser.iShirts.model.enums.Ativo;
 import br.com.dbc.vemser.iShirts.repository.UsuarioRepository;
+import br.com.dbc.vemser.iShirts.service.mocks.MockPessoa;
 import br.com.dbc.vemser.iShirts.service.mocks.MockUsuario;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
@@ -25,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 import static org.mockito.Mockito.*;
 
@@ -206,6 +208,57 @@ class UsuarioServiceTest {
         assertThrows(RegraDeNegocioException.class, () -> {
             usuarioService.atualizarUsuario(usuario.getIdUsuario(), usuarioUpdateDTO);
         }, "Usuário não encontrado");
+    }
+
+    @DisplayName("Deveria lançar uma exceção ao tentar cadastra usuario sem cargos")
+    @Test
+    void deveriaLancarExcecaoCadastrarUsuarioSemCargo() {
+        UsuarioCreateDTO usuarioCreateDTO = MockUsuario.retornarUsuarioCreateDTO();
+        usuarioCreateDTO.setCargos(null);
+
+        when(passwordEncoder.encode(anyString())).thenReturn("SenhaCriptografada");
+
+        assertThrows(RegraDeNegocioException.class, () -> {
+            usuarioService.criarUsuario(usuarioCreateDTO);
+        });
+    }
+
+    @DisplayName("Deveria lançar exceção ao tentar cadastrar ususario com cargo inexistente")
+    @Test
+    void deveriaLancarExcecaoCadastrarUsuarioCargoInexistente() throws RegraDeNegocioException {
+        UsuarioCreateDTO usuarioCreateDTO = MockUsuario.retornarUsuarioCreateDTO();
+
+        when(passwordEncoder.encode(anyString())).thenReturn("SenhaCriptografada");
+        when(cargoService.buscarCargoPorDescricao(anyString())).thenReturn(null);
+
+        assertThrows(RegraDeNegocioException.class, () -> {
+            usuarioService.criarUsuario(usuarioCreateDTO);
+        });
+    }
+
+    @DisplayName("Deveria lançar exceção ao tentar criar cliente")
+    @Test
+    void deveriaLancarExcecaoCriarCliente(){
+        ClienteCreateDTO usuarioCreateDTO = MockUsuario.retornarClienteCreateDTO();
+        usuarioCreateDTO.setEmail(null);
+        usuarioCreateDTO.setSenha(null);
+
+        assertThrows(RegraDeNegocioException.class, () -> {
+            usuarioService.criarCliente(usuarioCreateDTO);
+        });
+    }
+
+    @DisplayName("Deveria inativar a pessoa do usuario")
+    @Test
+    void deveriaInativarPessoaUsuario() throws RegraDeNegocioException {
+        Usuario usuario = MockUsuario.retornarEntity();
+        usuario.setPessoa(MockPessoa.retornarEntity());
+
+        when(usuarioRepository.findById(anyInt())).thenReturn(Optional.of(usuario));
+
+        usuarioService.inativarUsuario(new Random().nextInt());
+
+        verify(usuarioRepository, times(1)).save(any(Usuario.class));
     }
 
 
