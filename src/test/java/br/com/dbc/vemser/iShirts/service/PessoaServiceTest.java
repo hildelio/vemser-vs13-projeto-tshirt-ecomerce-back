@@ -104,6 +104,27 @@ public class PessoaServiceTest {
         assertThrows(RegraDeNegocioException.class, () -> pessoaService.cadastrarPessoa(pessoaCreateDTO));
     }
 
+    @DisplayName("Deveria criar uma outra pessoa ao cadastrar")
+    @Test
+    void deveriaCriarOutraPessoaCadastrar() throws RegraDeNegocioException {
+        PessoaCreateDTO pessoaCreateDTO = MockPessoa.retornarPessoaCreateDTO();
+        Integer idUsuarioLogado = 1;
+        Usuario usuario = new Usuario();
+        usuario.setIdUsuario(idUsuarioLogado);
+        Pessoa pessoa = MockPessoa.retornarEntity();
+
+        when(usuarioService.getIdLoggedUser()).thenReturn(idUsuarioLogado);
+        when(usuarioRepository.findById(idUsuarioLogado)).thenReturn(Optional.of(usuario));
+        when(pessoaRepository.findPessoaByUsuario(usuario)).thenReturn(null);
+        when(objectMapper.convertValue(pessoaCreateDTO, Pessoa.class)).thenReturn(null);
+        when(pessoaRepository.save(any(Pessoa.class))).thenReturn(pessoa);
+
+        Pessoa pessoaCadastrada = pessoaService.cadastrarPessoa(pessoaCreateDTO);
+
+        assertNotNull(pessoaCadastrada);
+        assertEquals(pessoa, pessoaCadastrada);
+    }
+
     @DisplayName("Teste para atualizar uma Pessoa")
     @Test
     public void testarAtualizarUmaPessoa() throws RegraDeNegocioException {
