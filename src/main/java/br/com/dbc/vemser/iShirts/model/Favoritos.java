@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.iShirts.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,11 +23,21 @@ public class Favoritos {
     @Column(name = "ID_FAVORITOS")
     private Integer idFavoritos;
 
-    @Column(name = "ID_USUARIO")
+    @Column(name = "ID_USUARIO", insertable = false, updatable = false)
     private Integer idUsuario;
 
-    @Column(name = "ID_VARIACAO")
+    @ManyToOne
+    @JoinColumn(name = "ID_USUARIO", referencedColumnName = "ID_USUARIO")
+    @JsonIgnore
+    private Usuario usuario;
+
+    @Column(name = "ID_VARIACAO", insertable = false, updatable = false)
     private Integer idVariacao;
+
+    @ManyToOne
+    @JoinColumn(name = "ID_VARIACAO", referencedColumnName = "ID_VARIACAO")
+    @JsonIgnore
+    private Variacao variacao;
 
     @Column(name = "CRIADO")
     private Timestamp criadoEm;

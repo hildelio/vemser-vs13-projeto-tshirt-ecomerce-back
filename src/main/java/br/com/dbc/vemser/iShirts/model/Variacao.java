@@ -68,4 +68,7 @@ public class Variacao {
     @Column(name = "EDITADO")
     private Timestamp editado;
 
+    @OneToMany(mappedBy = "variacao", cascade = CascadeType.ALL)
+    private List<Favoritos> favoritos;
+
 }
