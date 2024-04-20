@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -23,25 +25,22 @@ public class Favoritos {
     @Column(name = "ID_FAVORITOS")
     private Integer idFavoritos;
 
-    @Column(name = "ID_USUARIO", insertable = false, updatable = false)
-    private Integer idUsuario;
-
     @ManyToOne
     @JoinColumn(name = "ID_USUARIO", referencedColumnName = "ID_USUARIO")
     @JsonIgnore
     private Usuario usuario;
 
-    @Column(name = "ID_VARIACAO", insertable = false, updatable = false)
-    private Integer idVariacao;
 
     @ManyToOne
     @JoinColumn(name = "ID_VARIACAO", referencedColumnName = "ID_VARIACAO")
     @JsonIgnore
     private Variacao variacao;
 
+    @CreationTimestamp
     @Column(name = "CRIADO")
     private Timestamp criadoEm;
 
+    @UpdateTimestamp
     @Column(name = "EDITADO")
     private Timestamp editadoEm;
 }
