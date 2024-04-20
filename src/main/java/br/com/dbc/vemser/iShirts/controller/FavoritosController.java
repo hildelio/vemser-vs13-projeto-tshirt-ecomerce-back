@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.iShirts.controller;
 
+import br.com.dbc.vemser.iShirts.controller.interfaces.FavoritosControllerInterface;
 import br.com.dbc.vemser.iShirts.dto.favoritos.FavoritosCreateDTO;
 import br.com.dbc.vemser.iShirts.dto.favoritos.FavoritosDTO;
 import br.com.dbc.vemser.iShirts.exceptions.RegraDeNegocioException;
@@ -18,8 +19,7 @@ import java.util.List;
 @RequestMapping("/favoritos")
 @Validated
 @RequiredArgsConstructor
-@Tag(name = "Favoritos", description = "Endpoint de Favoritos")
-public class FavoritosController {
+public class FavoritosController implements FavoritosControllerInterface {
 
     private final FavoritosService favoritosService;
 
