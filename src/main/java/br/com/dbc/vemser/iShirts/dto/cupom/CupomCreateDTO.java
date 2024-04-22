@@ -2,7 +2,9 @@ package br.com.dbc.vemser.iShirts.dto.cupom;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
-
+import br.com.dbc.vemser.iShirts.annotation.deserializer.LocalDateTimeDeserializer;
+import br.com.dbc.vemser.iShirts.annotation.interfaces.FormatLocalDateTime;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -28,6 +30,9 @@ public class CupomCreateDTO {
     @NotNull
     @Future
     @Schema(description = "Validade do cupom", example = "2024-05-30T23:59:59", required = true)
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @FormatLocalDateTime
+    @Future
     private LocalDateTime validade;
 
     @NotNull

@@ -1,5 +1,6 @@
 package br.com.dbc.vemser.iShirts.service;
 
+import br.com.dbc.vemser.iShirts.repository.VariacaoRepository;
 import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.mock.web.MockMultipartFile;
 import br.com.dbc.vemser.iShirts.dto.foto.FotoDTO;
@@ -35,6 +36,8 @@ class FotoServiceTest {
     @Mock
     private VariacaoService variacaoService;
     @Mock
+    private VariacaoRepository variacaoRepository;
+    @Mock
     private  MediaTypeUtil mediaTypeUtil;
     @InjectMocks
     private FotoService fotoService;
@@ -63,6 +66,7 @@ class FotoServiceTest {
         assertNotNull(fotoResponse);
         assertEquals(fotoEntity.getIdFoto(), fotoResponse.getIdFoto());
         assertEquals(fotoEntity.getArquivo(), fotoResponse.getArquivo());
+        verify(variacaoRepository, times(1)).save(variacao);
     }
 
     @Test
@@ -171,17 +175,25 @@ class FotoServiceTest {
     }
 
     @Test
-    @DisplayName("Deveria deletar uma foto com sucesso")
-    void deveDeletarFoto() throws RegraDeNegocioException {
+    @DisplayName("Deveria deletar uma foto com sucesso e atualizar a variacao")
+    void deveDeletarFotoEAtualizarVariacao() throws RegraDeNegocioException, IOException {
 
-        Foto fotoEntity = new Foto();
-        fotoEntity.setIdFoto(1);
+        Variacao variacao = MockVariacao.retornarEntity();
+        Foto fotoEntity = MockFoto.retornarEntity();
+        fotoEntity.setVariacao(variacao);
+
+        when(variacaoService.buscarPorId(variacao.getIdVariacao())).thenReturn(variacao);
         when(fotoRepository.findById(anyInt())).thenReturn(java.util.Optional.of(fotoEntity));
 
         fotoService.deletar(1);
 
         verify(fotoRepository, times(1)).delete(fotoEntity);
+        verify(variacaoService, times(1)).buscarPorId(anyInt());
+        verify(variacaoRepository, times(1)).save(any(Variacao.class));
     }
+
+
+
 
     @Test
     @DisplayName("Não deveria deletar uma foto inexistente")

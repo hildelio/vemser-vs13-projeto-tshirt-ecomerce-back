@@ -39,6 +39,9 @@ public class Variacao {
     @Column(name = "ID_FOTO")
     private List<Foto> fotos = new ArrayList<>();
 
+    @Column(name = "ID_FOTO", insertable = false)
+    private Integer idFoto;
+
     @Column(name = "SKU")
     private String sku;
 
@@ -64,5 +67,8 @@ public class Variacao {
     @UpdateTimestamp
     @Column(name = "EDITADO")
     private Timestamp editado;
+
+    @OneToMany(mappedBy = "variacao", cascade = CascadeType.ALL)
+    private List<Favoritos> favoritos;
 
 }

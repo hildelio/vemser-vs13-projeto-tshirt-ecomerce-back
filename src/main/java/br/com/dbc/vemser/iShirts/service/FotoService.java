@@ -3,6 +3,7 @@ package br.com.dbc.vemser.iShirts.service;
 import br.com.dbc.vemser.iShirts.dto.foto.FotoDTO;
 import br.com.dbc.vemser.iShirts.model.Foto;
 import br.com.dbc.vemser.iShirts.exceptions.RegraDeNegocioException;
+import br.com.dbc.vemser.iShirts.repository.VariacaoRepository;
 import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import br.com.dbc.vemser.iShirts.model.Variacao;
 import br.com.dbc.vemser.iShirts.repository.FotoRepository;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +23,7 @@ public class FotoService {
 
     private final FotoRepository fotoRepository;
     private final VariacaoService variacaoService;
+    private final VariacaoRepository variacaoRepository;
     private final MediaTypeUtil mediaTypeUtil;
     private final ObjectMapper objectMapper;
 
@@ -32,6 +35,9 @@ public class FotoService {
        fotoEntity.setIdFoto(idVariacao);
        fotoEntity.setVariacao(variacao);
        fotoEntity = fotoRepository.save(fotoEntity);
+
+       variacao.setIdFoto(fotoEntity.getIdFoto());
+       variacaoRepository.save(variacao);
 
        FotoDTO fotoDTO = objectMapper.convertValue(fotoEntity, FotoDTO.class);
        return fotoDTO;
@@ -60,7 +66,13 @@ public class FotoService {
     public void deletar(Integer idFoto) throws RegraDeNegocioException {
         Foto foto = buscarPorId(idFoto);
 
+        Integer idVariacao = foto.getVariacao().getIdVariacao();
+        Variacao variacao = variacaoService.buscarPorId(idVariacao);
+
         fotoRepository.delete(foto);
+
+        variacao.setIdFoto(null);
+        variacaoRepository.save(variacao);
     }
 
     public Foto buscarPorId(Integer idFoto) throws RegraDeNegocioException {

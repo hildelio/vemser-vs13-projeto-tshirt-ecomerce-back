@@ -19,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.Random;
 
@@ -97,6 +98,89 @@ class CarrinhoServiceTest {
         assertNotNull(carrinhoResponse);
         assertEquals(carrinho.getUsuario().getIdUsuario(), carrinhoResponse.getIdUsuario());
         assertEquals(carrinho.getIdCarrinho(), carrinhoResponse.getIdCarrinho());
+    }
+
+    @DisplayName("Deveria lançar uma exceção ao criar carrinho")
+    @Test
+    void deveriaLancarExcecaoCriarCarrinho(){
+        CarrinhoCreateDTO carrinhoCreateDTOMock = MockCarrinho.retornaCarrinhoCreate();
+        carrinhoCreateDTOMock.setItens(null);
+        assertThrows(RegraDeNegocioException.class, () -> {carrinhoService.criarCarrinho(carrinhoCreateDTOMock);
+        });
+    }
+
+    @DisplayName("Deveria adicionar itens ao carrinho")
+    @Test
+    void deveriaAdicionarItemCarrinho() throws IOException, RegraDeNegocioException {
+        Carrinho carrinho = MockCarrinho.retornarEntity();
+        ItemCreateDTO itemCreateDTO = MockItem.retornarItemCreateDTO();
+        Item item = MockItem.retornarEntitty();
+        carrinho.setItens(new ArrayList<>());
+
+        when(usuarioService.buscarUsuarioLogadoEntity()).thenReturn(carrinho.getUsuario());
+        when(carrinhoRepository.findByUsuario(carrinho.getUsuario())).thenReturn(carrinho);
+        when(itemService.criarItem(itemCreateDTO)).thenReturn(item);
+        when(itemService.salvarItem(item)).thenReturn(item);
+        when(carrinhoRepository.save(carrinho)).thenReturn(carrinho);
+        when(itemService.converterDTO(carrinho.getItens())).thenReturn(MockItem.retornarListaItemDTO());
+
+        carrinhoService.adicionarItemCarrinho(itemCreateDTO);
+        assertEquals(item.getIdItem(), carrinho.getItens().get(0).getIdItem());
+    }
+
+
+    @DisplayName("Deveria lançar uma exceção ao remover item do carrinho")
+    @Test
+    void deveriaLancarExcecaoRemoverItemCarrinho() throws IOException, RegraDeNegocioException {
+        Carrinho carrinho = MockCarrinho.retornarEntity();
+        Item item = MockItem.retornarEntitty();
+        Integer idItem = new Random().nextInt();
+        carrinho.setItens(new ArrayList<>());
+
+        when(usuarioService.buscarUsuarioLogadoEntity()).thenReturn(carrinho.getUsuario());
+        when(carrinhoRepository.findByUsuario(carrinho.getUsuario())).thenReturn(carrinho);
+        when(itemService.buscarItemPorId(idItem)).thenReturn(item);
+        assertThrows(RegraDeNegocioException.class, () -> {carrinhoService.removerItemCarrinho(idItem);
+        });
+    }
+
+
+    @DisplayName("Deveria remover uma unidade de item encontrado no carrinho")
+    @Test
+    void deveriaRemoverUnidadeItemEncontradoCarrinho() throws IOException, RegraDeNegocioException{
+        Carrinho carrinho = MockCarrinho.retornarEntity();
+        Item item = MockItem.retornarEntitty();
+        Integer idItem = carrinho.getItens().get(0).getIdItem();
+        carrinho.getItens().get(0).setQuantidade(1);
+
+        when(usuarioService.buscarUsuarioLogadoEntity()).thenReturn(carrinho.getUsuario());
+        when(carrinhoRepository.findByUsuario(carrinho.getUsuario())).thenReturn(carrinho);
+        when(carrinhoRepository.save(carrinho)).thenReturn(carrinho);
+        when(itemService.converterDTO(carrinho.getItens())).thenReturn(MockItem.retornarListaItemDTO());
+        when(itemService.buscarItemPorId(anyInt())).thenReturn(item);
+
+        CarrinhoDTO carrinhoResponse = carrinhoService.removerUmaUnidadeItemCarrinho(idItem);
+
+        assertNotNull(carrinhoResponse);
+        assertEquals(1, carrinho.getItens().size());
+    }
+
+    @DisplayName("Deveria lançar uma exceção ao tentar remover uma unidade de item do carrinho")
+    @Test
+    void deveriaLancarExcecaoTentarRemoverUnidadeItemCarrinho() throws IOException, RegraDeNegocioException {
+        Carrinho carrinho = MockCarrinho.retornarEntity();
+        Item item = MockItem.retornarEntitty();
+        Integer idItem = carrinho.getItens().get(0).getIdItem();
+        carrinho.getItens().get(0).setQuantidade(1);
+
+        when(usuarioService.buscarUsuarioLogadoEntity()).thenReturn(carrinho.getUsuario());
+        when(carrinhoRepository.findByUsuario(carrinho.getUsuario())).thenReturn(carrinho);
+        when(itemService.buscarItemPorId(anyInt())).thenReturn(item);
+
+        item.getVariacao().getProduto().setIdProduto(new Random().nextInt());
+        assertThrows(RegraDeNegocioException.class, () -> {
+            carrinhoService.removerUmaUnidadeItemCarrinho(idItem);
+        });
     }
 
     @Test
