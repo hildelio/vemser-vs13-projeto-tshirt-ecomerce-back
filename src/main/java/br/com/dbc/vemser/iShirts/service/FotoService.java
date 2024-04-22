@@ -66,7 +66,13 @@ public class FotoService {
     public void deletar(Integer idFoto) throws RegraDeNegocioException {
         Foto foto = buscarPorId(idFoto);
 
+        Integer idVariacao = foto.getVariacao().getIdVariacao();
+        Variacao variacao = variacaoService.buscarPorId(idVariacao);
+
         fotoRepository.delete(foto);
+
+        variacao.setIdFoto(null);
+        variacaoRepository.save(variacao);
     }
 
     public Foto buscarPorId(Integer idFoto) throws RegraDeNegocioException {
